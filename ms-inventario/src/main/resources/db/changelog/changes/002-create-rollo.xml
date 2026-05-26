@@ -13,13 +13,13 @@
             <column name="textil_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="metros_totales" type="DECIMAL(10,2)">
+            <column name="metros_totales" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
-            <column name="metros_restantes" type="DECIMAL(10,2)">
+            <column name="metros_restantes" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
-            <column name="metros_usados" type="DECIMAL(10,2)">
+            <column name="metros_usados" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
             <column name="fecha_ingreso" type="DATE">
