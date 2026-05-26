@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="003" author="branco">
+        <!-- Pedido 1: Carlos Muñoz -->
+        <insert tableName="pedidos">
+            <column name="cliente_id" valueNumeric="1"/>
+            <column name="fecha" valueDate="2026-05-01"/>
+            <column name="estado" value="COMPLETADO"/>
+            <column name="total" valueNumeric="9500"/>
+        </insert>
+        <!-- Pedido 2: María González -->
+        <insert tableName="pedidos">
+            <column name="cliente_id" valueNumeric="2"/>
+            <column name="fecha" valueDate="2026-05-05"/>
+            <column name="estado" value="EN_PROCESO"/>
+            <column name="total" valueNumeric="33000"/>
+        </insert>
+        <!-- Pedido 3: Jorge Ramírez -->
+        <insert tableName="pedidos">
+            <column name="cliente_id" valueNumeric="3"/>
+            <column name="fecha" valueDate="2026-05-10"/>
+            <column name="estado" value="PENDIENTE"/>
+            <column name="total" valueNumeric="30000"/>
+        </insert>
+        <!-- Pedido 4: Valentina Soto -->
+        <insert tableName="pedidos">
+            <column name="cliente_id" valueNumeric="4"/>
+            <column name="fecha" valueDate="2026-05-15"/>
+            <column name="estado" value="PENDIENTE"/>
+            <column name="total" valueNumeric="19500"/>
+        </insert>
+        <!-- Pedido 5: Andrés Pérez -->
+        <insert tableName="pedidos">
+            <column name="cliente_id" valueNumeric="5"/>
+            <column name="fecha" valueDate="2026-05-20"/>
+            <column name="estado" value="CANCELADO"/>
+            <column name="total" valueNumeric="12000"/>
+        </insert>
+
+        <!-- Detalles Pedido 1: Estampado Básico x2 + Cubresensor x1 -->
+        <insert tableName="detalle_pedido">
+            <column name="pedido_id" valueNumeric="1"/>
+            <column name="producto_id" valueNumeric="1"/>
+            <column name="nombre_producto" value="Estampado Básico"/>
+            <column name="cantidad" valueNumeric="2"/>
+            <column name="precio_unitario" valueNumeric="3500"/>
+            <column name="subtotal" valueNumeric="7000"/>
+        </insert>
+        <insert tableName="detalle_pedido">
+            <column name="pedido_id" valueNumeric="1"/>
+            <column name="producto_id" valueNumeric="3"/>
+            <column name="nombre_producto" value="Cubresensor Estándar"/>
+            <column name="cantidad" valueNumeric="1"/>
+            <column name="precio_unitario" valueNumeric="2500"/>
+            <column name="subtotal" valueNumeric="2500"/>
+        </insert>
+
+        <!-- Detalles Pedido 2: Lienzo x1 + Backlight x1 -->
+        <insert tableName="detalle_pedido">
+            <column name="pedido_id" valueNumeric="2"/>
+            <column name="producto_id" valueNumeric="2"/>
+            <column name="nombre_producto" value="Lienzo Promocional"/>
+            <column name="cantidad" valueNumeric="1"/>
+            <column name="precio_unitario" valueNumeric="8000"/>
+            <column name="subtotal" valueNumeric="8000"/>
+        </insert>
+        <insert tableName="detalle_pedido">
+            <column name="pedido_id" valueNumeric="2"/>
+            <column name="producto_id" valueNumeric="12"/>
+            <column name="nombre_producto" value="Backlight Publicitario"/>
+            <column name="cantidad" valueNumeric="1"/>
+            <column name="precio_unitario" valueNumeric="25000"/>
+            <column name="subtotal" valueNumeric="25000"/>
+        </insert>
+
+        <!-- Detalles Pedido 3: Bandera x2 -->
+        <insert tableName="detalle_pedido">
+            <column name="pedido_id" valueNumeric="3"/>
+            <column name="producto_id" valueNumeric="4"/>
+            <column name="nombre_producto" value="Bandera Corporativa"/>
+            <column name="cantidad" valueNumeric="2"/>
+            <column name="precio_unitario" valueNumeric="15000"/>
+            <column name="subtotal" valueNumeric="30000"/>
+        </insert>
+
+        <!-- Detalles Pedido 4: Banderín x3 + Monedero x2 -->
+        <insert tableName="detalle_pedido">
+            <column name="pedido_id" valueNumeric="4"/>
+            <column name="producto_id" valueNumeric="5"/>
+            <column name="nombre_producto" value="Banderín Evento"/>
+            <column name="cantidad" valueNumeric="3"/>
+            <column name="precio_unitario" valueNumeric="4500"/>
+            <column name="subtotal" valueNumeric="13500"/>
+        </insert>
+        <insert tableName="detalle_pedido">
+            <column name="pedido_id" valueNumeric="4"/>
+            <column name="producto_id" valueNumeric="7"/>
+            <column name="nombre_producto" value="Monedero Bordado"/>
+            <column name="cantidad" valueNumeric="2"/>
+            <column name="precio_unitario" valueNumeric="3000"/>
+            <column name="subtotal" valueNumeric="6000"/>
+        </insert>
+
+        <!-- Detalles Pedido 5: Mantel x1 -->
+        <insert tableName="detalle_pedido">
+            <column name="pedido_id" valueNumeric="5"/>
+            <column name="producto_id" valueNumeric="8"/>
+            <column name="nombre_producto" value="Mantel Corporativo"/>
+            <column name="cantidad" valueNumeric="1"/>
+            <column name="precio_unitario" valueNumeric="12000"/>
+            <column name="subtotal" valueNumeric="12000"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
