@@ -76,6 +76,19 @@ public class OrdenProduccionService {
         return guardada;
     }
 
+    public OrdenProduccion update(Long id, OrdenProduccionRequestDTO dto) {
+        log.info("Actualizando orden de producción con id: {}", id);
+        OrdenProduccion orden = findById(id);
+        orden.setPedidoId(dto.getPedidoId());
+        orden.setProductoId(dto.getProductoId());
+        orden.setTextilId(dto.getTextilId());
+        orden.setRolloId(dto.getRolloId());
+        orden.setMetrosUsados(dto.getMetrosUsados());
+        OrdenProduccion actualizada = ordenRepository.save(orden);
+        log.info("Orden de producción con id {} actualizada", id);
+        return actualizada;
+    }
+
     public OrdenProduccion updateEstado(Long id, String nuevoEstado) {
         if (!ESTADOS_VALIDOS.contains(nuevoEstado.toUpperCase())) {
             log.warn("Estado inválido recibido: {}", nuevoEstado);
