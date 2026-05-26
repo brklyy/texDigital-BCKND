@@ -33,9 +33,20 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.findByClienteId(clienteId));
     }
 
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<List<PedidoResponseDTO>> getByEstado(@PathVariable String estado) {
+        return ResponseEntity.ok(pedidoService.findByEstado(estado));
+    }
+
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> create(@Valid @RequestBody PedidoRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(pedidoService.create(dto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PedidoResponseDTO> update(@PathVariable Long id,
+                                                    @Valid @RequestBody PedidoRequestDTO dto) {
+        return ResponseEntity.ok(pedidoService.update(id, dto));
     }
 
     @PatchMapping("/{id}/estado")

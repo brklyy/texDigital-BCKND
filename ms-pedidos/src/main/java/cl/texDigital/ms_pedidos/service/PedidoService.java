@@ -91,6 +91,46 @@ public class PedidoService {
         return toResponseDTO(guardado);
     }
 
+    public List<PedidoResponseDTO> findByEstado(String estado) {
+        log.debug("Buscando pedidos con estado={}", estado);
+        return pedidoRepository.findByEstado(estado).stream()
+                .map(this::toResponseDTO)
+                .toList();
+    }
+
+    public PedidoResponseDTO update(Long id, PedidoRequestDTO dto) {
+        log.debug("Actualizando pedido id={}", id);
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido no encontrado con id: " + id));
+
+        ClienteResponse cliente = clienteClient.findById(dto.getClienteId());
+        if (!"ACTIVO".equals(cliente.getEstado())) {
+            throw new IllegalStateException("El cliente con id " + dto.getClienteId() + " no está activo.");
+        }
+
+        pedido.setClienteId(dto.getClienteId());
+        pedido.getDetalles().clear();
+
+        double total = 0.0;
+        for (DetallePedidoRequestDTO detalleDto : dto.getDetalles()) {
+            ProductoResponse producto = productoClient.findById(detalleDto.getProductoId());
+            DetallePedido detalle = new DetallePedido();
+            detalle.setPedido(pedido);
+            detalle.setProductoId(detalleDto.getProductoId());
+            detalle.setNombreProducto(producto.getNombre());
+            detalle.setCantidad(detalleDto.getCantidad());
+            detalle.setPrecioUnitario(producto.getPrecioBase());
+            double subtotal = detalleDto.getCantidad() * producto.getPrecioBase();
+            detalle.setSubtotal(subtotal);
+            total += subtotal;
+            pedido.getDetalles().add(detalle);
+        }
+
+        pedido.setTotal(total);
+        log.debug("Pedido id={} actualizado, nuevo total={}", id, total);
+        return toResponseDTO(pedidoRepository.save(pedido));
+    }
+
     public PedidoResponseDTO updateEstado(Long id, String estado) {
         log.debug("Actualizando estado de pedido id={} a {}", id, estado);
         Pedido pedido = pedidoRepository.findById(id)
