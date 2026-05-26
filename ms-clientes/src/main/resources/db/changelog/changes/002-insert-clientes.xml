@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="002" author="branco">
+        <insert tableName="clientes">
+            <column name="nombre" value="Carlos"/>
+            <column name="apellido" value="Muñoz"/>
+            <column name="email" value="carlos.munoz@empresa.cl"/>
+            <column name="telefono" value="+56912345678"/>
+            <column name="direccion" value="Av. Providencia 1234, Santiago"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="clientes">
+            <column name="nombre" value="María"/>
+            <column name="apellido" value="González"/>
+            <column name="email" value="maria.gonzalez@tienda.cl"/>
+            <column name="telefono" value="+56923456789"/>
+            <column name="direccion" value="Calle Larga 567, Valparaíso"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="clientes">
+            <column name="nombre" value="Jorge"/>
+            <column name="apellido" value="Ramírez"/>
+            <column name="email" value="jorge.ramirez@corp.cl"/>
+            <column name="telefono" value="+56934567890"/>
+            <column name="direccion" value="Los Leones 890, Providencia"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="clientes">
+            <column name="nombre" value="Valentina"/>
+            <column name="apellido" value="Soto"/>
+            <column name="email" value="valentina.soto@moda.cl"/>
+            <column name="telefono" value="+56945678901"/>
+            <column name="direccion" value="Av. Apoquindo 3200, Las Condes"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="clientes">
+            <column name="nombre" value="Andrés"/>
+            <column name="apellido" value="Pérez"/>
+            <column name="email" value="andres.perez@eventos.cl"/>
+            <column name="telefono" value="+56956789012"/>
+            <column name="direccion" value="Gran Avenida 456, San Miguel"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="clientes">
+            <column name="nombre" value="Camila"/>
+            <column name="apellido" value="Torres"/>
+            <column name="email" value="camila.torres@publicidad.cl"/>
+            <column name="telefono" value="+56967890123"/>
+            <column name="direccion" value="Av. Libertad 789, Viña del Mar"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="clientes">
+            <column name="nombre" value="Felipe"/>
+            <column name="apellido" value="Vargas"/>
+            <column name="email" value="felipe.vargas@textiles.cl"/>
+            <column name="telefono" value="+56978901234"/>
+            <column name="direccion" value="Calle Comercio 100, Concepción"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="clientes">
+            <column name="nombre" value="Daniela"/>
+            <column name="apellido" value="Herrera"/>
+            <column name="email" value="daniela.herrera@diseno.cl"/>
+            <column name="telefono" value="+56989012345"/>
+            <column name="direccion" value="Merced 230, Santiago Centro"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="clientes">
+            <column name="nombre" value="Sebastián"/>
+            <column name="apellido" value="Flores"/>
+            <column name="email" value="sebastian.flores@imprenta.cl"/>
+            <column name="telefono" value="+56990123456"/>
+            <column name="direccion" value="Av. Matta 1500, Santiago"/>
+            <column name="estado" value="INACTIVO"/>
+        </insert>
+        <insert tableName="clientes">
+            <column name="nombre" value="Javiera"/>
+            <column name="apellido" value="Morales"/>
+            <column name="email" value="javiera.morales@marketing.cl"/>
+            <column name="telefono" value="+56901234567"/>
+            <column name="direccion" value="Pedro de Valdivia 320, Providencia"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
