@@ -1,23 +1,24 @@
 package cl.texDigital.ms_produccion.service;
 
 import cl.texDigital.ms_produccion.dto.OrdenProduccionRequestDTO;
+import cl.texDigital.ms_produccion.dto.OrdenProduccionResponseDTO;
+import cl.texDigital.ms_produccion.exception.ResourceNotFoundException;
 import cl.texDigital.ms_produccion.model.OrdenProduccion;
 import cl.texDigital.ms_produccion.repository.OrdenProduccionRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
+@Slf4j
 @Service
+@Transactional
 public class OrdenProduccionService {
-
-    private static final Logger log = LoggerFactory.getLogger(OrdenProduccionService.class);
 
     private static final List<String> ESTADOS_VALIDOS = List.of(
             "PENDIENTE", "EN_PRODUCCION", "COMPLETADO"
@@ -32,34 +33,37 @@ public class OrdenProduccionService {
         this.webClientInventario = webClientInventario;
     }
 
-    public List<OrdenProduccion> findAll() {
+    @Transactional(readOnly = true)
+    public List<OrdenProduccionResponseDTO> findAll() {
         log.info("Consultando todas las órdenes de producción");
-        return ordenRepository.findAll();
+        return ordenRepository.findAll().stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
-    public OrdenProduccion findById(Long id) {
+    @Transactional(readOnly = true)
+    public OrdenProduccionResponseDTO findById(Long id) {
         log.info("Consultando orden de producción con id: {}", id);
-        return ordenRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.warn("Orden de producción con id {} no encontrada", id);
-                    return new NoSuchElementException("Orden de producción con id " + id + " no encontrada");
-                });
+        return toResponseDTO(getOrThrow(id));
     }
 
-    public List<OrdenProduccion> findByPedidoId(Long pedidoId) {
+    @Transactional(readOnly = true)
+    public List<OrdenProduccionResponseDTO> findByPedidoId(Long pedidoId) {
         log.info("Consultando órdenes de producción por pedidoId: {}", pedidoId);
-        return ordenRepository.findByPedidoId(pedidoId);
+        return ordenRepository.findByPedidoId(pedidoId).stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
+    @Transactional(readOnly = true)
     public Double getTotalMetros() {
         log.info("Calculando total de metros usados en producción");
         Double total = ordenRepository.sumTotalMetrosUsados();
         return total != null ? total : 0.0;
     }
 
-    public OrdenProduccion save(OrdenProduccionRequestDTO dto) {
+    public OrdenProduccionResponseDTO save(OrdenProduccionRequestDTO dto) {
         log.info("Creando orden de producción para pedidoId: {}", dto.getPedidoId());
-
         descontarMetrosEnInventario(dto.getRolloId(), dto.getMetrosUsados());
 
         OrdenProduccion orden = new OrdenProduccion();
@@ -73,12 +77,12 @@ public class OrdenProduccionService {
 
         OrdenProduccion guardada = ordenRepository.save(orden);
         log.info("Orden de producción creada con id: {}", guardada.getId());
-        return guardada;
+        return toResponseDTO(guardada);
     }
 
-    public OrdenProduccion update(Long id, OrdenProduccionRequestDTO dto) {
+    public OrdenProduccionResponseDTO update(Long id, OrdenProduccionRequestDTO dto) {
         log.info("Actualizando orden de producción con id: {}", id);
-        OrdenProduccion orden = findById(id);
+        OrdenProduccion orden = getOrThrow(id);
         orden.setPedidoId(dto.getPedidoId());
         orden.setProductoId(dto.getProductoId());
         orden.setTextilId(dto.getTextilId());
@@ -86,17 +90,17 @@ public class OrdenProduccionService {
         orden.setMetrosUsados(dto.getMetrosUsados());
         OrdenProduccion actualizada = ordenRepository.save(orden);
         log.info("Orden de producción con id {} actualizada", id);
-        return actualizada;
+        return toResponseDTO(actualizada);
     }
 
-    public OrdenProduccion updateEstado(Long id, String nuevoEstado) {
+    public OrdenProduccionResponseDTO updateEstado(Long id, String nuevoEstado) {
         if (!ESTADOS_VALIDOS.contains(nuevoEstado.toUpperCase())) {
             log.warn("Estado inválido recibido: {}", nuevoEstado);
             throw new IllegalArgumentException("Estado inválido: " + nuevoEstado +
                     ". Estados permitidos: " + ESTADOS_VALIDOS);
         }
 
-        OrdenProduccion orden = findById(id);
+        OrdenProduccion orden = getOrThrow(id);
         orden.setEstado(nuevoEstado.toUpperCase());
 
         if ("COMPLETADO".equals(nuevoEstado.toUpperCase())) {
@@ -105,13 +109,35 @@ public class OrdenProduccionService {
 
         OrdenProduccion actualizada = ordenRepository.save(orden);
         log.info("Estado de orden {} actualizado a: {}", id, nuevoEstado);
-        return actualizada;
+        return toResponseDTO(actualizada);
     }
 
     public void delete(Long id) {
-        OrdenProduccion orden = findById(id);
+        OrdenProduccion orden = getOrThrow(id);
         ordenRepository.delete(orden);
         log.info("Orden de producción eliminada con id: {}", id);
+    }
+
+    private OrdenProduccion getOrThrow(Long id) {
+        return ordenRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Orden de producción con id {} no encontrada", id);
+                    return new ResourceNotFoundException("Orden de producción con id " + id + " no encontrada");
+                });
+    }
+
+    private OrdenProduccionResponseDTO toResponseDTO(OrdenProduccion orden) {
+        return new OrdenProduccionResponseDTO(
+                orden.getId(),
+                orden.getPedidoId(),
+                orden.getProductoId(),
+                orden.getTextilId(),
+                orden.getRolloId(),
+                orden.getMetrosUsados(),
+                orden.getEstado(),
+                orden.getFechaCreacion(),
+                orden.getFechaFin()
+        );
     }
 
     private void descontarMetrosEnInventario(Long rolloId, Double metros) {
