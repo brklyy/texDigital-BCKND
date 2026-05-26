@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="2" author="branco-aliaga">
+        <createTable tableName="rollo">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="textil_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="metros_totales" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="metros_restantes" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="metros_usados" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fecha_ingreso" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="estado" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="rollo"
+                baseColumnNames="textil_id"
+                constraintName="fk_rollo_textil"
+                referencedTableName="textil"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

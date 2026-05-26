@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="4" author="branco-aliaga">
+        <!-- Pearl (textil_id=1) - 2 rollos -->
+        <insert tableName="rollo">
+            <column name="textil_id" value="1"/>
+            <column name="metros_totales" value="500.00"/>
+            <column name="metros_restantes" value="320.00"/>
+            <column name="metros_usados" value="180.00"/>
+            <column name="fecha_ingreso" value="2025-01-10"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="rollo">
+            <column name="textil_id" value="1"/>
+            <column name="metros_totales" value="500.00"/>
+            <column name="metros_restantes" value="500.00"/>
+            <column name="metros_usados" value="0.00"/>
+            <column name="fecha_ingreso" value="2025-03-15"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <!-- Mesh (textil_id=2) - 2 rollos -->
+        <insert tableName="rollo">
+            <column name="textil_id" value="2"/>
+            <column name="metros_totales" value="300.00"/>
+            <column name="metros_restantes" value="75.00"/>
+            <column name="metros_usados" value="225.00"/>
+            <column name="fecha_ingreso" value="2025-01-20"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="rollo">
+            <column name="textil_id" value="2"/>
+            <column name="metros_totales" value="300.00"/>
+            <column name="metros_restantes" value="300.00"/>
+            <column name="metros_usados" value="0.00"/>
+            <column name="fecha_ingreso" value="2025-04-01"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <!-- Canvas (textil_id=3) - 2 rollos -->
+        <insert tableName="rollo">
+            <column name="textil_id" value="3"/>
+            <column name="metros_totales" value="400.00"/>
+            <column name="metros_restantes" value="0.00"/>
+            <column name="metros_usados" value="400.00"/>
+            <column name="fecha_ingreso" value="2024-11-05"/>
+            <column name="estado" value="AGOTADO"/>
+        </insert>
+        <insert tableName="rollo">
+            <column name="textil_id" value="3"/>
+            <column name="metros_totales" value="400.00"/>
+            <column name="metros_restantes" value="250.00"/>
+            <column name="metros_usados" value="150.00"/>
+            <column name="fecha_ingreso" value="2025-02-10"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <!-- Saten (textil_id=4) - 1 rollo -->
+        <insert tableName="rollo">
+            <column name="textil_id" value="4"/>
+            <column name="metros_totales" value="200.00"/>
+            <column name="metros_restantes" value="140.00"/>
+            <column name="metros_usados" value="60.00"/>
+            <column name="fecha_ingreso" value="2025-02-20"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <!-- Latex (textil_id=5) - 1 rollo -->
+        <insert tableName="rollo">
+            <column name="textil_id" value="5"/>
+            <column name="metros_totales" value="350.00"/>
+            <column name="metros_restantes" value="200.00"/>
+            <column name="metros_usados" value="150.00"/>
+            <column name="fecha_ingreso" value="2025-01-30"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <!-- Poliester (textil_id=6) - 2 rollos -->
+        <insert tableName="rollo">
+            <column name="textil_id" value="6"/>
+            <column name="metros_totales" value="600.00"/>
+            <column name="metros_restantes" value="450.00"/>
+            <column name="metros_usados" value="150.00"/>
+            <column name="fecha_ingreso" value="2025-03-01"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <insert tableName="rollo">
+            <column name="textil_id" value="6"/>
+            <column name="metros_totales" value="600.00"/>
+            <column name="metros_restantes" value="600.00"/>
+            <column name="metros_usados" value="0.00"/>
+            <column name="fecha_ingreso" value="2025-04-10"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+        <!-- Microporoso (textil_id=7) - 1 rollo -->
+        <insert tableName="rollo">
+            <column name="textil_id" value="7"/>
+            <column name="metros_totales" value="250.00"/>
+            <column name="metros_restantes" value="180.00"/>
+            <column name="metros_usados" value="70.00"/>
+            <column name="fecha_ingreso" value="2025-02-01"/>
+            <column name="estado" value="ACTIVO"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
