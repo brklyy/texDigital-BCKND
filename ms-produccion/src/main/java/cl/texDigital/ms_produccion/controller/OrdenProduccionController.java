@@ -55,6 +55,13 @@ public class OrdenProduccionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ordenService.save(dto));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<OrdenProduccion> update(@PathVariable Long id,
+                                                   @Valid @RequestBody OrdenProduccionRequestDTO dto) {
+        log.info("PUT /api/ordenes/{}", id);
+        return ResponseEntity.ok(ordenService.update(id, dto));
+    }
+
     @PatchMapping("/{id}/estado")
     public ResponseEntity<OrdenProduccion> updateEstado(@PathVariable Long id,
                                                          @RequestBody Map<String, String> body) {
