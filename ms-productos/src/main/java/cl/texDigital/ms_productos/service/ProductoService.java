@@ -1,19 +1,20 @@
 package cl.texDigital.ms_productos.service;
 
 import cl.texDigital.ms_productos.dto.ProductoRequestDTO;
+import cl.texDigital.ms_productos.dto.ProductoResponseDTO;
+import cl.texDigital.ms_productos.exception.ResourceNotFoundException;
 import cl.texDigital.ms_productos.model.Producto;
 import cl.texDigital.ms_productos.repository.ProductoRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
+@Slf4j
 @Service
+@Transactional
 public class ProductoService {
-
-    private static final Logger log = LoggerFactory.getLogger(ProductoService.class);
 
     private static final List<String> TIPOS_VALIDOS = List.of(
             "ESTAMPADO", "LIENZO", "CUBRESENSOR", "BANDERA", "BANDERIN",
@@ -29,26 +30,29 @@ public class ProductoService {
         this.productoRepository = productoRepository;
     }
 
-    public List<Producto> findAll() {
+    @Transactional(readOnly = true)
+    public List<ProductoResponseDTO> findAll() {
         log.info("Consultando todos los productos");
-        return productoRepository.findAll();
+        return productoRepository.findAll().stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
-    public Producto findById(Long id) {
+    @Transactional(readOnly = true)
+    public ProductoResponseDTO findById(Long id) {
         log.info("Consultando producto con id: {}", id);
-        return productoRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.warn("Producto con id {} no encontrado", id);
-                    return new NoSuchElementException("Producto con id " + id + " no encontrado");
-                });
+        return toResponseDTO(getOrThrow(id));
     }
 
-    public List<Producto> findByTipo(String tipo) {
+    @Transactional(readOnly = true)
+    public List<ProductoResponseDTO> findByTipo(String tipo) {
         log.info("Consultando productos por tipo: {}", tipo);
-        return productoRepository.findByTipo(tipo.toUpperCase());
+        return productoRepository.findByTipo(tipo.toUpperCase()).stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
-    public Producto save(ProductoRequestDTO dto) {
+    public ProductoResponseDTO save(ProductoRequestDTO dto) {
         validarTipo(dto.getTipo());
         validarTextilPearl(dto.getTipo(), dto.getTextilRequerido());
 
@@ -60,11 +64,11 @@ public class ProductoService {
 
         Producto guardado = productoRepository.save(producto);
         log.info("Producto creado con id: {}", guardado.getId());
-        return guardado;
+        return toResponseDTO(guardado);
     }
 
-    public Producto update(Long id, ProductoRequestDTO dto) {
-        Producto producto = findById(id);
+    public ProductoResponseDTO update(Long id, ProductoRequestDTO dto) {
+        Producto producto = getOrThrow(id);
         validarTipo(dto.getTipo());
         validarTextilPearl(dto.getTipo(), dto.getTextilRequerido());
 
@@ -75,13 +79,31 @@ public class ProductoService {
 
         Producto actualizado = productoRepository.save(producto);
         log.info("Producto actualizado con id: {}", actualizado.getId());
-        return actualizado;
+        return toResponseDTO(actualizado);
     }
 
     public void delete(Long id) {
-        Producto producto = findById(id);
+        Producto producto = getOrThrow(id);
         productoRepository.delete(producto);
         log.info("Producto eliminado con id: {}", id);
+    }
+
+    private Producto getOrThrow(Long id) {
+        return productoRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Producto con id {} no encontrado", id);
+                    return new ResourceNotFoundException("Producto con id " + id + " no encontrado");
+                });
+    }
+
+    private ProductoResponseDTO toResponseDTO(Producto producto) {
+        return new ProductoResponseDTO(
+                producto.getId(),
+                producto.getNombre(),
+                producto.getTipo(),
+                producto.getTextilRequerido(),
+                producto.getPrecioBase()
+        );
     }
 
     private void validarTipo(String tipo) {
