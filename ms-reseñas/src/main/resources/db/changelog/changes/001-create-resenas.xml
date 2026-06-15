@@ -69,6 +69,34 @@
             <column name="comentario" value="El lienzo cumple su función, aunque el acabado podría mejorar un poco."/>
             <column name="fecha" value="2026-03-01 10:20:00"/>
         </insert>
+        <insert tableName="resenas">
+            <column name="cliente_id" value="6"/>
+            <column name="producto_id" value="3"/>
+            <column name="puntaje" value="4"/>
+            <column name="comentario" value="El cubresensor se ve bien, pero se despegó después de un par de lavados."/>
+            <column name="fecha" value="2026-03-05 12:00:00"/>
+        </insert>
+        <insert tableName="resenas">
+            <column name="cliente_id" value="7"/>
+            <column name="producto_id" value="8"/>
+            <column name="puntaje" value="9"/>
+            <column name="comentario" value="El mantel corporativo quedó perfecto para nuestro evento, muy buena tela."/>
+            <column name="fecha" value="2026-03-08 17:45:00"/>
+        </insert>
+        <insert tableName="resenas">
+            <column name="cliente_id" value="8"/>
+            <column name="producto_id" value="11"/>
+            <column name="puntaje" value="7"/>
+            <column name="comentario" value="El pañuelo personalizado quedó lindo, aunque esperaba una tela más suave."/>
+            <column name="fecha" value="2026-03-12 09:10:00"/>
+        </insert>
+        <insert tableName="resenas">
+            <column name="cliente_id" value="9"/>
+            <column name="producto_id" value="13"/>
+            <column name="puntaje" value="10"/>
+            <column name="comentario" value="La caja backlight premium superó todas mis expectativas, calidad excelente."/>
+            <column name="fecha" value="2026-03-16 19:25:00"/>
+        </insert>
     </changeSet>
 
 </databaseChangeLog>
