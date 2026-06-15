@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001-create-resenas" author="bruno">
+        <createTable tableName="resenas">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="producto_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="puntaje" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comentario" type="VARCHAR(500)"/>
+            <column name="fecha" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="002-seed-resenas" author="bruno">
+        <insert tableName="resenas">
+            <column name="cliente_id" value="1"/>
+            <column name="producto_id" value="1"/>
+            <column name="puntaje" value="9"/>
+            <column name="comentario" value="Excelente calidad de impresión, superó mis expectativas."/>
+            <column name="fecha" value="2026-02-10 11:15:00"/>
+        </insert>
+        <insert tableName="resenas">
+            <column name="cliente_id" value="2"/>
+            <column name="producto_id" value="4"/>
+            <column name="puntaje" value="7"/>
+            <column name="comentario" value="Buena bandera, aunque el envío tardó un poco más de lo esperado."/>
+            <column name="fecha" value="2026-02-14 09:40:00"/>
+        </insert>
+        <insert tableName="resenas">
+            <column name="cliente_id" value="3"/>
+            <column name="producto_id" value="6"/>
+            <column name="puntaje" value="10"/>
+            <column name="comentario" value="El estuche es precioso y muy resistente, lo recomiendo totalmente."/>
+            <column name="fecha" value="2026-02-18 16:05:00"/>
+        </insert>
+        <insert tableName="resenas">
+            <column name="cliente_id" value="4"/>
+            <column name="producto_id" value="9"/>
+            <column name="puntaje" value="5"/>
+            <column name="comentario" value="La funda de cojín es bonita, pero el color no era exactamente el que esperaba."/>
+            <column name="fecha" value="2026-02-21 13:30:00"/>
+        </insert>
+        <insert tableName="resenas">
+            <column name="cliente_id" value="5"/>
+            <column name="producto_id" value="12"/>
+            <column name="puntaje" value="8"/>
+            <column name="comentario" value="El backlight se ve increíble una vez iluminado, muy buena terminación."/>
+            <column name="fecha" value="2026-02-25 18:50:00"/>
+        </insert>
+        <insert tableName="resenas">
+            <column name="cliente_id" value="1"/>
+            <column name="producto_id" value="2"/>
+            <column name="puntaje" value="6"/>
+            <column name="comentario" value="El lienzo cumple su función, aunque el acabado podría mejorar un poco."/>
+            <column name="fecha" value="2026-03-01 10:20:00"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
