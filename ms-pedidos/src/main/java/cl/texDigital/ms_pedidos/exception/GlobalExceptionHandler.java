@@ -26,6 +26,13 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(400, "Bad Request", ex.getMessage(), LocalDateTime.now()));
     }
 
+    // Error de comunicacion con un microservicio remoto (timeout, caido, 5xx)
+    @ExceptionHandler(ServicioRemotoException.class)
+    public ResponseEntity<ErrorResponse> handleServicioRemoto(ServicioRemotoException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new ErrorResponse(503, "Service Unavailable", ex.getMessage(), LocalDateTime.now()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
