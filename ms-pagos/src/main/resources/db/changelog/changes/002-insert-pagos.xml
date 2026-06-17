@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="002" author="branco">
+        <!-- Pago pedido 1 (total 9500, sin descuento): IVA 19% = 1805, total 11305 -->
+        <insert tableName="pagos">
+            <column name="pedido_id" valueNumeric="1"/>
+            <column name="metodo_pago" value="TARJETA"/>
+            <column name="monto_base" valueNumeric="9500"/>
+            <column name="porcentaje_descuento" valueNumeric="0"/>
+            <column name="monto_descuento" valueNumeric="0"/>
+            <column name="monto_neto" valueNumeric="9500"/>
+            <column name="iva" valueNumeric="1805"/>
+            <column name="monto_total" valueNumeric="11305"/>
+            <column name="estado" value="PAGADO"/>
+            <column name="fecha_pago" valueDate="2026-05-02"/>
+        </insert>
+        <!-- Pago pedido 2 (total 33000, 10% desc): desc 3300, neto 29700, IVA 5643, total 35343 -->
+        <insert tableName="pagos">
+            <column name="pedido_id" valueNumeric="2"/>
+            <column name="metodo_pago" value="TRANSFERENCIA"/>
+            <column name="monto_base" valueNumeric="33000"/>
+            <column name="porcentaje_descuento" valueNumeric="10"/>
+            <column name="monto_descuento" valueNumeric="3300"/>
+            <column name="monto_neto" valueNumeric="29700"/>
+            <column name="iva" valueNumeric="5643"/>
+            <column name="monto_total" valueNumeric="35343"/>
+            <column name="estado" value="PAGADO"/>
+            <column name="fecha_pago" valueDate="2026-05-06"/>
+        </insert>
+        <!-- Pago pedido 3 (total 30000, 5% desc): desc 1500, neto 28500, IVA 5415, total 33915 -->
+        <insert tableName="pagos">
+            <column name="pedido_id" valueNumeric="3"/>
+            <column name="metodo_pago" value="TARJETA"/>
+            <column name="monto_base" valueNumeric="30000"/>
+            <column name="porcentaje_descuento" valueNumeric="5"/>
+            <column name="monto_descuento" valueNumeric="1500"/>
+            <column name="monto_neto" valueNumeric="28500"/>
+            <column name="iva" valueNumeric="5415"/>
+            <column name="monto_total" valueNumeric="33915"/>
+            <column name="estado" value="PAGADO"/>
+            <column name="fecha_pago" valueDate="2026-05-11"/>
+        </insert>
+        <!-- Pago pedido 4 (total 19500, sin descuento): IVA 3705, total 23205 -->
+        <insert tableName="pagos">
+            <column name="pedido_id" valueNumeric="4"/>
+            <column name="metodo_pago" value="EFECTIVO"/>
+            <column name="monto_base" valueNumeric="19500"/>
+            <column name="porcentaje_descuento" valueNumeric="0"/>
+            <column name="monto_descuento" valueNumeric="0"/>
+            <column name="monto_neto" valueNumeric="19500"/>
+            <column name="iva" valueNumeric="3705"/>
+            <column name="monto_total" valueNumeric="23205"/>
+            <column name="estado" value="PENDIENTE"/>
+            <column name="fecha_pago" valueDate="2026-05-16"/>
+        </insert>
+        <!-- Pago pedido 5 (total 12000, sin descuento): IVA 2280, total 14280 - reembolsado -->
+        <insert tableName="pagos">
+            <column name="pedido_id" valueNumeric="5"/>
+            <column name="metodo_pago" value="EFECTIVO"/>
+            <column name="monto_base" valueNumeric="12000"/>
+            <column name="porcentaje_descuento" valueNumeric="0"/>
+            <column name="monto_descuento" valueNumeric="0"/>
+            <column name="monto_neto" valueNumeric="12000"/>
+            <column name="iva" valueNumeric="2280"/>
+            <column name="monto_total" valueNumeric="14280"/>
+            <column name="estado" value="REEMBOLSADO"/>
+            <column name="fecha_pago" valueDate="2026-05-21"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

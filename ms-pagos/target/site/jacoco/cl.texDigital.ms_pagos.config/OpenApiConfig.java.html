@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OpenApiConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ms-pagos</a> &gt; <a href="index.source.html" class="el_package">cl.texDigital.ms_pagos.config</a> &gt; <span class="el_source">OpenApiConfig.java</span></div><h1>OpenApiConfig.java</h1><pre class="source lang-java linenums">package cl.texDigital.ms_pagos.config;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+<span class="nc" id="L11">public class OpenApiConfig {</span>
+
+    @Bean
+    public OpenAPI msPagosOpenAPI() {
+<span class="nc" id="L15">        return new OpenAPI()</span>
+<span class="nc" id="L16">                .info(new Info()</span>
+<span class="nc" id="L17">                        .title(&quot;ms-pagos API&quot;)</span>
+<span class="nc" id="L18">                        .description(&quot;Microservicio de gestion de pagos de texDigital. &quot;</span>
+                                + &quot;Registra el pago de un pedido, aplica descuentos y calcula el IVA (19%). &quot;
+                                + &quot;Se comunica con ms-pedidos para obtener el monto y actualizar el estado del pedido.&quot;)
+<span class="nc" id="L21">                        .version(&quot;1.0.0&quot;)</span>
+<span class="nc" id="L22">                        .contact(new Contact()</span>
+<span class="nc" id="L23">                                .name(&quot;Equipo texDigital&quot;)</span>
+<span class="nc" id="L24">                                .url(&quot;https://github.com/brklyy/texDigital-BCKND&quot;))</span>
+<span class="nc" id="L25">                        .license(new License().name(&quot;Uso academico - DSY1103&quot;)));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
