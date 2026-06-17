@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PagoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ms-pagos</a> &gt; <a href="index.source.html" class="el_package">cl.texDigital.ms_pagos.controller</a> &gt; <span class="el_source">PagoController.java</span></div><h1>PagoController.java</h1><pre class="source lang-java linenums">package cl.texDigital.ms_pagos.controller;
+
+import cl.texDigital.ms_pagos.dto.PagoRequestDTO;
+import cl.texDigital.ms_pagos.dto.PagoResponseDTO;
+import cl.texDigital.ms_pagos.service.PagoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+@RestController
+@RequestMapping(&quot;/api/pagos&quot;)
+@RequiredArgsConstructor
+@Tag(name = &quot;Pagos&quot;, description = &quot;Gestion de pagos de pedidos de texDigital&quot;)
+public class PagoController {
+
+    private final PagoService pagoService;
+
+    @Operation(summary = &quot;Listar todos los pagos&quot;,
+            description = &quot;Devuelve todos los pagos con enlaces HATEOAS de navegacion.&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, description = &quot;Lista obtenida correctamente&quot;))
+    @GetMapping
+    public ResponseEntity&lt;CollectionModel&lt;EntityModel&lt;PagoResponseDTO&gt;&gt;&gt; getAll() {
+<span class="fc" id="L36">        List&lt;EntityModel&lt;PagoResponseDTO&gt;&gt; pagos = pagoService.findAll().stream()</span>
+<span class="fc" id="L37">                .map(this::toModel)</span>
+<span class="fc" id="L38">                .toList();</span>
+<span class="fc" id="L39">        return ResponseEntity.ok(CollectionModel.of(pagos,</span>
+<span class="fc" id="L40">                linkTo(methodOn(PagoController.class).getAll()).withSelfRel()));</span>
+    }
+
+    @Operation(summary = &quot;Obtener pago por id&quot;,
+            description = &quot;Busca un pago por su identificador e incluye enlaces HATEOAS.&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Pago encontrado&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Pago no encontrado&quot;)
+    })
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;EntityModel&lt;PagoResponseDTO&gt;&gt; getById(@PathVariable Long id) {
+<span class="fc" id="L51">        return ResponseEntity.ok(toModel(pagoService.findById(id)));</span>
+    }
+
+    @Operation(summary = &quot;Listar pagos por pedido&quot;,
+            description = &quot;Devuelve todos los pagos asociados a un pedido.&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, description = &quot;Lista obtenida correctamente&quot;))
+    @GetMapping(&quot;/pedido/{pedidoId}&quot;)
+    public ResponseEntity&lt;CollectionModel&lt;EntityModel&lt;PagoResponseDTO&gt;&gt;&gt; getByPedido(@PathVariable Long pedidoId) {
+<span class="fc" id="L59">        List&lt;EntityModel&lt;PagoResponseDTO&gt;&gt; pagos = pagoService.findByPedidoId(pedidoId).stream()</span>
+<span class="fc" id="L60">                .map(this::toModel)</span>
+<span class="fc" id="L61">                .toList();</span>
+<span class="fc" id="L62">        return ResponseEntity.ok(CollectionModel.of(pagos,</span>
+<span class="fc" id="L63">                linkTo(methodOn(PagoController.class).getByPedido(pedidoId)).withSelfRel()));</span>
+    }
+
+    @Operation(summary = &quot;Listar pagos por estado&quot;,
+            description = &quot;Devuelve los pagos filtrados por estado (PENDIENTE, PAGADO, RECHAZADO, REEMBOLSADO).&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, description = &quot;Lista obtenida correctamente&quot;))
+    @GetMapping(&quot;/estado/{estado}&quot;)
+    public ResponseEntity&lt;CollectionModel&lt;EntityModel&lt;PagoResponseDTO&gt;&gt;&gt; getByEstado(@PathVariable String estado) {
+<span class="fc" id="L71">        List&lt;EntityModel&lt;PagoResponseDTO&gt;&gt; pagos = pagoService.findByEstado(estado).stream()</span>
+<span class="fc" id="L72">                .map(this::toModel)</span>
+<span class="fc" id="L73">                .toList();</span>
+<span class="fc" id="L74">        return ResponseEntity.ok(CollectionModel.of(pagos,</span>
+<span class="fc" id="L75">                linkTo(methodOn(PagoController.class).getByEstado(estado)).withSelfRel()));</span>
+    }
+
+    @Operation(summary = &quot;Registrar un pago&quot;,
+            description = &quot;Crea un pago para un pedido. Toma el monto desde ms-pedidos, aplica el descuento &quot;
+                    + &quot;indicado y calcula el IVA (19%).&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Pago registrado&quot;),
+            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Datos invalidos o pedido ya pagado&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Pedido no encontrado en ms-pedidos&quot;),
+            @ApiResponse(responseCode = &quot;503&quot;, description = &quot;ms-pedidos no disponible&quot;)
+    })
+    @PostMapping
+    public ResponseEntity&lt;PagoResponseDTO&gt; create(@Valid @RequestBody PagoRequestDTO dto) {
+<span class="fc" id="L89">        return ResponseEntity.status(HttpStatus.CREATED).body(pagoService.create(dto));</span>
+    }
+
+    @Operation(summary = &quot;Actualizar un pago&quot;,
+            description = &quot;Modifica el metodo de pago y el descuento, recalculando neto, IVA y total.&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Pago actualizado&quot;),
+            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Datos invalidos&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Pago no encontrado&quot;)
+    })
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;PagoResponseDTO&gt; update(@PathVariable Long id,
+                                                  @Valid @RequestBody PagoRequestDTO dto) {
+<span class="fc" id="L102">        return ResponseEntity.ok(pagoService.update(id, dto));</span>
+    }
+
+    @Operation(summary = &quot;Cambiar el estado de un pago&quot;,
+            description = &quot;Actualiza solo el estado del pago (por ejemplo, a REEMBOLSADO).&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Estado actualizado&quot;),
+            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Estado invalido&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Pago no encontrado&quot;)
+    })
+    @PatchMapping(&quot;/{id}/estado&quot;)
+    public ResponseEntity&lt;PagoResponseDTO&gt; updateEstado(@PathVariable Long id,
+                                                        @RequestParam String estado) {
+<span class="fc" id="L115">        return ResponseEntity.ok(pagoService.updateEstado(id, estado));</span>
+    }
+
+    @Operation(summary = &quot;Eliminar un pago&quot;,
+            description = &quot;Elimina un pago por su identificador.&quot;)
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Pago eliminado&quot;),
+            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Pago no encontrado&quot;)
+    })
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {
+<span class="fc" id="L126">        pagoService.delete(id);</span>
+<span class="fc" id="L127">        return ResponseEntity.noContent().build();</span>
+    }
+
+    // Envuelve un DTO en un EntityModel con sus enlaces HATEOAS.
+    private EntityModel&lt;PagoResponseDTO&gt; toModel(PagoResponseDTO dto) {
+<span class="fc" id="L132">        return EntityModel.of(dto,</span>
+<span class="fc" id="L133">                linkTo(methodOn(PagoController.class).getById(dto.getId())).withSelfRel(),</span>
+<span class="fc" id="L134">                linkTo(methodOn(PagoController.class).getByPedido(dto.getPedidoId())).withRel(&quot;pagos-del-pedido&quot;),</span>
+<span class="fc" id="L135">                linkTo(methodOn(PagoController.class).getAll()).withRel(&quot;pagos&quot;));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
