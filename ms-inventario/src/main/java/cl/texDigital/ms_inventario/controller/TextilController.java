@@ -88,7 +88,6 @@ public class TextilController {
         return ResponseEntity.noContent().build();
     }
 
-    // Envuelve un DTO en un EntityModel con sus enlaces HATEOAS.
     private EntityModel<TextilResponseDTO> toModel(TextilResponseDTO dto) {
         return EntityModel.of(dto,
                 linkTo(methodOn(TextilController.class).getById(dto.getId())).withSelfRel(),

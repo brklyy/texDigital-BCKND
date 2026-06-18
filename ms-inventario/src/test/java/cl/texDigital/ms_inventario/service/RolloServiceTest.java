@@ -27,10 +27,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Pruebas unitarias de RolloService, con foco en la regla de consumo de metros.
- * Convencion: Given - When - Then.
- */
 @ExtendWith(MockitoExtension.class)
 class RolloServiceTest {
 

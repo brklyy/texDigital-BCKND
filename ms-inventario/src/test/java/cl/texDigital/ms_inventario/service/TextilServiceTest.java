@@ -24,10 +24,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Pruebas unitarias de TextilService. Se mockean ambos repositorios.
- * Convencion: Given - When - Then.
- */
 @ExtendWith(MockitoExtension.class)
 class TextilServiceTest {
 

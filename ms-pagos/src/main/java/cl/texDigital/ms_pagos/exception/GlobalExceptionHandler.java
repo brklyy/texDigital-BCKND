@@ -20,21 +20,18 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(404, "Not Found", ex.getMessage(), LocalDateTime.now()));
     }
 
-    // Reglas de negocio violadas (ej. pedido ya pagado)
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ErrorResponse> handleIllegalState(IllegalStateException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(400, "Bad Request", ex.getMessage(), LocalDateTime.now()));
     }
 
-    // Datos invalidos a nivel de negocio (ej. metodo de pago o estado no permitido)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(400, "Bad Request", ex.getMessage(), LocalDateTime.now()));
     }
 
-    // Error de comunicacion con un microservicio remoto (timeout, caido, 5xx)
     @ExceptionHandler(ServicioRemotoException.class)
     public ResponseEntity<ErrorResponse> handleServicioRemoto(ServicioRemotoException ex) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)

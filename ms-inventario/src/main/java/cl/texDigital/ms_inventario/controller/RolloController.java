@@ -116,7 +116,6 @@ public class RolloController {
         return ResponseEntity.noContent().build();
     }
 
-    // Envuelve un DTO en un EntityModel con sus enlaces HATEOAS.
     private EntityModel<RolloResponseDTO> toModel(RolloResponseDTO dto) {
         return EntityModel.of(dto,
                 linkTo(methodOn(RolloController.class).getById(dto.getId())).withSelfRel(),

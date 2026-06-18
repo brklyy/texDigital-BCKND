@@ -34,7 +34,6 @@ public class Rollo {
     @Column(name = "fecha_ingreso", nullable = false)
     private LocalDate fechaIngreso;
 
-    // Valores posibles: ACTIVO, AGOTADO, BAJA
     @Column(nullable = false, length = 20)
     private String estado;
 }

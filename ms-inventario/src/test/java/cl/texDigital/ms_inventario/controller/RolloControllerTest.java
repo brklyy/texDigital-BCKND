@@ -100,7 +100,6 @@ class RolloControllerTest {
     @Test
     @DisplayName("POST /api/rollos con body invalido devuelve 400")
     void create_devuelve400_siBodyInvalido() throws Exception {
-        // falta textilId y fechaIngreso; metros negativos
         String body = "{\"metrosTotales\":-10}";
         mockMvc.perform(post("/api/rollos")
                         .contentType(MediaType.APPLICATION_JSON)

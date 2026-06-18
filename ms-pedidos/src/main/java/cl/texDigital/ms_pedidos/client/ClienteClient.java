@@ -12,11 +12,6 @@ import org.springframework.web.client.RestClient;
 
 import java.time.Duration;
 
-/**
- * Cliente REST hacia ms-clientes.
- * Configura timeouts y traduce los errores remotos a excepciones propias
- * para que el GlobalExceptionHandler responda con el codigo HTTP adecuado.
- */
 @Component
 @Slf4j
 public class ClienteClient {

@@ -127,7 +127,6 @@ public class PagoController {
         return ResponseEntity.noContent().build();
     }
 
-    // Envuelve un DTO en un EntityModel con sus enlaces HATEOAS.
     private EntityModel<PagoResponseDTO> toModel(PagoResponseDTO dto) {
         return EntityModel.of(dto,
                 linkTo(methodOn(PagoController.class).getById(dto.getId())).withSelfRel(),

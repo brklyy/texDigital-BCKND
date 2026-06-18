@@ -5,10 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Representacion parcial del pedido que devuelve ms-pedidos.
- * Solo mapeamos los campos que ms-pagos necesita; el resto se ignora.
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

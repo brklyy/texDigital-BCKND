@@ -84,7 +84,6 @@ class TextilControllerTest {
     @Test
     @DisplayName("POST /api/textiles con body invalido devuelve 400")
     void create_devuelve400_siBodyInvalido() throws Exception {
-        // nombre en blanco y ancho negativo -> fallan las validaciones
         String body = "{\"nombre\":\"\",\"anchoCm\":-5}";
         mockMvc.perform(post("/api/textiles")
                         .contentType(MediaType.APPLICATION_JSON)
