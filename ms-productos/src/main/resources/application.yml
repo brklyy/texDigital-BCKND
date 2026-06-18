@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: ms-productos
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+server:
+  port: ${SERVER_PORT:8084}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+logging:
+  level:
+    cl.texDigital.ms_productos: ${LOG_LEVEL:DEBUG}
+    org.springframework.web: INFO
+    liquibase: INFO
