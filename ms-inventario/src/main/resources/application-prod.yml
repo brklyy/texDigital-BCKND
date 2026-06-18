@@ -1,4 +1,3 @@
-# Perfil PROD: despliegue remoto (Railway/Render). Datos sensibles via variables de entorno.
 spring:
   datasource:
     url: ${DB_URL}
@@ -7,3 +6,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: false
+
+server:
+  port: ${PORT:8081}
