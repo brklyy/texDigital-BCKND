@@ -1,128 +1,239 @@
 # texDigital — Backend Microservicios
 
-Sistema de gestión para empresa de productos textiles digitales. Permite administrar inventario de textiles, clientes, pedidos y producción de productos como estampados, lienzos, backlights, banderas y más.
+Sistema de gestión para empresa de productos textiles digitales. Permite administrar inventario de textiles, clientes, pedidos, producción, pagos, reseñas y autenticación de usuarios mediante una arquitectura de microservicios con API Gateway centralizado.
 
 ## Integrantes del equipo
 
 | Nombre | Rol |
 |---|---|
-| Branco Aliaga | ms-inventario, ms-clientes, ms-pedidos |
+| Branco Aliaga | ms-inventario, ms-clientes, ms-pedidos, ms-pagos, ms-reseñas, auth-service, api-gateway |
 | Bruno Carrasco | ms-productos, ms-produccion |
 
 ---
 
 ## Arquitectura
 
-5 microservicios independientes, cada uno con su propia base de datos MySQL.
+9 servicios independientes (8 MS + API Gateway), cada MS con su propia base de datos MySQL.
 
 ```
-ms-inventario  (8081)  <── ms-produccion (8085)
-ms-clientes    (8082)  <─┐
-ms-productos   (8084)  <─┴─ ms-pedidos   (8083)
+                        [Cliente / Browser]
+                                │
+                    ┌───────────▼────────────┐
+                    │    api-gateway :8080    │
+                    └─────────────────────────┘
+                                │
+        ┌───────────┬───────────┼───────────┬───────────┐
+        │           │           │           │           │
+  auth :8090  clientes:8082  pedidos:8083  pagos:8086  reseñas:8087
+                                │    │          │           │
+                         clientes  productos  pedidos    pedidos
+                                │
+                         productos:8084
+
+  inventario:8081 ◄── produccion:8085
 ```
+
+**Comunicación entre MS:**
+- `ms-pedidos` → RestClient → `ms-clientes` (valida estado ACTIVO) + `ms-productos` (precio)
+- `ms-pagos` → RestClient → `ms-pedidos` (obtiene monto, aplica IVA 19%)
+- `ms-produccion` → WebClient → `ms-inventario` (descuenta metros de rollo)
+- `ms-reseñas` → WebClient → `ms-pedidos` (valida que cliente haya comprado el producto)
 
 ---
 
 ## Microservicios
 
-### ms-inventario (puerto 8081 | db_inventario)
-Gestiona el stock de textiles y rollos de tela.
-- **Entidades:** `Textil`, `Rollo` (relación ManyToOne)
-- **Endpoints:** `/api/textiles`, `/api/rollos`
-- **Endpoints especiales:** `PUT /api/rollos/{id}/usar`, `GET /api/rollos/textil/{textilId}`
+| MS | Puerto | Base de datos | Endpoints base |
+|---|---|---|---|
+| api-gateway | 8080 | — | Enruta todos los MS |
+| auth-service | 8090 | texdigital_auth | `/auth`, `/api/usuarios` |
+| ms-inventario | 8081 | texdigital_inventario | `/api/textiles`, `/api/rollos` |
+| ms-clientes | 8082 | texdigital_clientes | `/api/clientes` |
+| ms-pedidos | 8083 | texdigital_pedidos | `/api/pedidos` |
+| ms-productos | 8084 | texdigital_productos | `/api/productos` |
+| ms-produccion | 8085 | texdigital_produccion | `/api/ordenes` |
+| ms-pagos | 8086 | texdigital_pagos | `/api/pagos` |
+| ms-reseñas | 8087 | texdigital_resenas | `/api/resenas` |
 
-### ms-clientes (puerto 8082 | db_clientes)
-Gestiona el registro de clientes de la empresa.
-- **Entidad:** `Cliente`
-- **Endpoints:** `/api/clientes`
+---
 
-### ms-pedidos (puerto 8083 | db_pedidos)
-Gestiona los pedidos y sus detalles. Se comunica con ms-clientes y ms-productos.
-- **Entidades:** `Pedido`, `DetallePedido` (relación OneToMany)
-- **Endpoints:** `/api/pedidos`
-- **Endpoints especiales:** `GET /api/pedidos/cliente/{clienteId}`, `GET /api/pedidos/estado/{estado}`
-- **Comunicación:** valida cliente en ms-clientes, obtiene precio y nombre de ms-productos
+## Documentación Swagger UI (ejecución local)
 
-### ms-productos (puerto 8084 | texdigital_productos)
-Gestiona el catálogo de productos textiles.
-- **Entidad:** `Producto`
-- **Endpoints:** `/api/productos`
-- **Regla de negocio:** BACKLIGHT y CAJA_BACKLIGHT solo usan textil Pearl
+| MS | URL Swagger |
+|---|---|
+| auth-service | http://localhost:8090/swagger-ui.html |
+| ms-inventario | http://localhost:8081/swagger-ui.html |
+| ms-clientes | http://localhost:8082/swagger-ui.html |
+| ms-pedidos | http://localhost:8083/swagger-ui.html |
+| ms-productos | http://localhost:8084/swagger-ui.html |
+| ms-produccion | http://localhost:8085/swagger-ui.html |
+| ms-pagos | http://localhost:8086/swagger-ui.html |
+| ms-reseñas | http://localhost:8087/swagger-ui.html |
 
-### ms-produccion (puerto 8085 | texdigital_produccion)
-Gestiona las órdenes de producción. Se comunica con ms-inventario para descontar metros de rollo.
-- **Entidad:** `OrdenProduccion`
-- **Endpoints:** `/api/ordenes`
-- **Endpoints especiales:** `GET /api/ordenes/pedido/{pedidoId}`, `GET /api/ordenes/stats/metros`
-- **Comunicación:** descuenta metros usados en ms-inventario al crear una orden
+---
+
+## Rutas del API Gateway
+
+Todos los endpoints son accesibles a través del Gateway en el puerto 8080:
+
+| Ruta Gateway | MS destino | Puerto directo |
+|---|---|---|
+| `/auth/**` | auth-service | 8090 |
+| `/api/usuarios/**` | auth-service | 8090 |
+| `/api/clientes/**` | ms-clientes | 8082 |
+| `/api/textiles/**` | ms-inventario | 8081 |
+| `/api/rollos/**` | ms-inventario | 8081 |
+| `/api/pedidos/**` | ms-pedidos | 8083 |
+| `/api/productos/**` | ms-productos | 8084 |
+| `/api/ordenes/**` | ms-produccion | 8085 |
+| `/api/pagos/**` | ms-pagos | 8086 |
+| `/api/resenas/**` | ms-reseñas | 8087 |
 
 ---
 
 ## Stack tecnológico
 
-- **Framework:** Spring Boot 3.5.14
-- **Lenguaje:** Java 17
+- **Framework:** Spring Boot 3.5.14 / Java 17
+- **API Gateway:** Spring Cloud Gateway 2024.0.1
+- **Autenticación:** JWT (auth-service, Spring Security + jjwt)
 - **ORM:** JPA / Hibernate 6
 - **Migraciones:** Liquibase
-- **Base de datos:** MySQL (XAMPP)
+- **Base de datos:** MySQL
+- **Documentación:** Swagger / OpenAPI 3 (springdoc-openapi 2.8.6)
+- **HATEOAS:** Spring HATEOAS (EntityModel, CollectionModel)
 - **Validaciones:** Bean Validation (JSR 380)
-- **Comunicación entre MS:** RestClient / WebClient
-- **Logging:** SLF4J
-- **Otros:** Lombok, ResponseEntity, @ControllerAdvice
+- **Comunicación entre MS:** RestClient / WebClient (Reactor)
+- **Tests:** JUnit 5 + Mockito + MockMvc
+- **Cobertura:** JaCoCo 0.8.12
+- **Contenedores:** Docker (multi-stage build)
+- **Logging:** SLF4J + Lombok @Slf4j
 
 ---
 
-## Requisitos previos
+## Requisitos previos (ejecución local)
 
 - Java 17 o superior
-- Maven (incluido via `mvnw`)
-- XAMPP con MySQL activo en puerto 3306
-- Las bases de datos se crean automáticamente al levantar cada MS
+- Maven 3.9+
+- MySQL activo en puerto 3306 (XAMPP o instalación nativa)
 
 ---
 
-## Pasos para ejecutar
+## Ejecución local
 
-1. Clonar el repositorio:
-```bash
-git clone https://github.com/brklyy/texDigital-BCKND.git
-cd texDigital-BCKND
-```
+Las bases de datos se crean automáticamente con Liquibase al primer inicio.
 
-2. Iniciar XAMPP y asegurarse que MySQL esté corriendo en el puerto 3306.
-
-3. Levantar cada microservicio en una terminal separada (en este orden):
+Levantar los servicios en el siguiente orden (una terminal por servicio):
 
 ```bash
-# Terminal 1
-cd ms-inventario && ./mvnw spring-boot:run
+# 1 — Sin dependencias externas
+cd ms-inventario  && ./mvnw spring-boot:run
+cd ms-clientes    && ./mvnw spring-boot:run
+cd ms-productos   && ./mvnw spring-boot:run
+cd auth-service   && ./mvnw spring-boot:run
 
-# Terminal 2
-cd ms-clientes && ./mvnw spring-boot:run
+# 2 — Dependen de los anteriores
+cd ms-pedidos     && ./mvnw spring-boot:run
+cd ms-produccion  && ./mvnw spring-boot:run
 
-# Terminal 3
-cd ms-productos && ./mvnw spring-boot:run
+# 3 — Dependen de ms-pedidos
+cd ms-pagos       && ./mvnw spring-boot:run
+cd "ms-reseñas"   && ./mvnw spring-boot:run
 
-# Terminal 4
-cd ms-pedidos && ./mvnw spring-boot:run
-
-# Terminal 5
-cd ms-produccion && ./mvnw spring-boot:run
+# 4 — Gateway (último, enruta a todos)
+cd api-gateway    && ./mvnw spring-boot:run
 ```
 
-4. Las bases de datos y tablas se crean automáticamente con Liquibase al primer inicio.
+### Autenticación JWT
+
+Registrar usuario:
+```bash
+POST http://localhost:8090/auth/register
+Content-Type: application/json
+{"username": "admin", "password": "admin123", "email": "admin@texdigital.cl", "rol": "ADMIN"}
+```
+
+Obtener token:
+```bash
+POST http://localhost:8090/auth/login
+Content-Type: application/json
+{"username": "admin", "password": "admin123"}
+```
+
+Usar token en solicitudes:
+```
+Authorization: Bearer <token>
+```
 
 ---
 
-## Datos de prueba (seed)
+## Datos de prueba (DataLoader)
 
-| Microservicio | Registros |
+Los siguientes MS cargan datos iniciales automáticamente si la tabla está vacía:
+
+| MS | Registros |
 |---|---|
-| ms-inventario | 7 textiles + 11 rollos |
-| ms-clientes | 10 clientes |
-| ms-pedidos | 5 pedidos + 9 detalles |
-| ms-productos | 13 productos |
-| ms-produccion | 3 ordenes |
+| ms-inventario | 7 textiles + 11 rollos (Liquibase) |
+| ms-clientes | 5 clientes (DataLoader) |
+| ms-pedidos | (Liquibase) |
+| ms-productos | 7 productos (DataLoader) |
+| ms-produccion | (Liquibase) |
+| ms-pagos | 3 pagos (DataLoader) |
+
+---
+
+## Despliegue remoto (Railway)
+
+Cada MS y el API Gateway se despliegan como servicio independiente en Railway con su propia base de datos MySQL.
+
+### Variables de entorno por servicio
+
+**Todos los MS con base de datos:**
+```
+SPRING_PROFILES_ACTIVE=prod
+DB_URL=jdbc:mysql://<host>:<port>/<database>
+DB_USERNAME=<usuario>
+DB_PASSWORD=<contraseña>
+```
+
+**auth-service (adicional):**
+```
+JWT_SECRET=<clave_secreta_minimo_32_caracteres>
+```
+
+**ms-pagos (adicional):**
+```
+MS_PEDIDOS_URL=https://<url-railway-ms-pedidos>
+```
+
+**ms-pedidos (adicional):**
+```
+MS_CLIENTES_URL=https://<url-railway-ms-clientes>
+MS_PRODUCTOS_URL=https://<url-railway-ms-productos>
+```
+
+**ms-produccion (adicional):**
+```
+MS_INVENTARIO_URL=https://<url-railway-ms-inventario>
+```
+
+**ms-reseñas (adicional):**
+```
+MS_PEDIDOS_URL=https://<url-railway-ms-pedidos>
+```
+
+**api-gateway (adicional):**
+```
+AUTH_SERVICE_URL=https://<url-railway-auth-service>
+MS_CLIENTES_URL=https://<url-railway-ms-clientes>
+MS_INVENTARIO_URL=https://<url-railway-ms-inventario>
+MS_PAGOS_URL=https://<url-railway-ms-pagos>
+MS_PEDIDOS_URL=https://<url-railway-ms-pedidos>
+MS_PRODUCCION_URL=https://<url-railway-ms-produccion>
+MS_PRODUCTOS_URL=https://<url-railway-ms-productos>
+MS_RESENAS_URL=https://<url-railway-ms-resenas>
+```
+
+> Railway inyecta la variable `PORT` automáticamente. No es necesario configurarla.
 
 ---
 
@@ -131,4 +242,4 @@ cd ms-produccion && ./mvnw spring-boot:run
 - Repositorio: https://github.com/brklyy/texDigital-BCKND
 - Tablero Trello: https://trello.com/b/4FjOchp1/texdigital-backend
 - Rama principal: `main`
-- Estrategia: una rama por capa CSR (`feature/ms-nombre/capa`), merge inmediato por PR
+- Estrategia: una rama por cambio (`feature/ms-nombre/descripcion`), merge a main por PR
