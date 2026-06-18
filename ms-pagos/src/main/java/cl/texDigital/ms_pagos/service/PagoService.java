@@ -22,7 +22,6 @@ import java.util.Set;
 @Transactional
 public class PagoService {
 
-    // Tasa de IVA en Chile (19%)
     private static final double IVA_RATE = 0.19;
     private static final Set<String> METODOS_VALIDOS = Set.of("EFECTIVO", "TARJETA", "TRANSFERENCIA");
     private static final Set<String> ESTADOS_VALIDOS = Set.of("PENDIENTE", "PAGADO", "RECHAZADO", "REEMBOLSADO");
@@ -55,13 +54,11 @@ public class PagoService {
 
         validarMetodo(dto.getMetodoPago());
 
-        // Regla de negocio: un pedido no puede pagarse dos veces
         if (pagoRepository.existsByPedidoIdAndEstado(dto.getPedidoId(), "PAGADO")) {
             throw new IllegalStateException(
                     "El pedido " + dto.getPedidoId() + " ya tiene un pago registrado como PAGADO.");
         }
 
-        // Comunicacion REST: el monto se toma del pedido en ms-pedidos, no del cliente
         PedidoResponse pedido = pedidoClient.findById(dto.getPedidoId());
 
         Pago pago = new Pago();
@@ -74,7 +71,6 @@ public class PagoService {
         Pago guardado = pagoRepository.save(pago);
         log.debug("Pago creado con id={}, total={}", guardado.getId(), guardado.getMontoTotal());
 
-        // Notifica a ms-pedidos (best-effort, no aborta el pago si falla)
         pedidoClient.actualizarEstado(dto.getPedidoId(), "PAGADO");
 
         return toResponseDTO(guardado);
@@ -86,7 +82,6 @@ public class PagoService {
         validarMetodo(dto.getMetodoPago());
 
         pago.setMetodoPago(dto.getMetodoPago().toUpperCase());
-        // Recalcula descuento e IVA sobre el mismo monto base ya registrado
         aplicarCalculos(pago, pago.getMontoBase(), dto.getPorcentajeDescuento());
 
         return toResponseDTO(pagoRepository.save(pago));
@@ -113,12 +108,6 @@ public class PagoService {
         log.debug("Pago eliminado con id={}", id);
     }
 
-    // ----- Reglas de negocio internas -----
-
-    /**
-     * Calcula descuento, monto neto, IVA (19%) y total a partir del monto base
-     * y el porcentaje de descuento. Los montos se redondean al peso (CLP no usa decimales).
-     */
     private void aplicarCalculos(Pago pago, double montoBase, int porcentajeDescuento) {
         double montoDescuento = redondear(montoBase * (porcentajeDescuento / 100.0));
         double montoNeto = montoBase - montoDescuento;

@@ -104,7 +104,6 @@ class PedidoControllerTest {
     @Test
     @DisplayName("POST /api/pedidos con body invalido devuelve 400")
     void create_devuelve400_siBodyInvalido() throws Exception {
-        // falta clienteId y la lista de detalles esta vacia
         String body = "{\"detalles\":[]}";
         mockMvc.perform(post("/api/pedidos")
                         .contentType(MediaType.APPLICATION_JSON)

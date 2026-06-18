@@ -28,11 +28,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Pruebas de la capa web de PagoController usando @WebMvcTest (sin levantar BD).
- * El servicio se reemplaza por un mock; se valida el ruteo, los codigos HTTP
- * y la traduccion de excepciones del GlobalExceptionHandler.
- */
 @WebMvcTest(PagoController.class)
 class PagoControllerTest {
 
@@ -112,7 +107,6 @@ class PagoControllerTest {
     @Test
     @DisplayName("POST /api/pagos con body invalido devuelve 400")
     void create_devuelve400_siBodyInvalido() throws Exception {
-        // Falta metodoPago, pedidoId negativo y descuento > 100 -> fallan las validaciones
         String body = "{\"pedidoId\":-1,\"porcentajeDescuento\":150}";
         mockMvc.perform(post("/api/pagos")
                         .contentType(MediaType.APPLICATION_JSON)

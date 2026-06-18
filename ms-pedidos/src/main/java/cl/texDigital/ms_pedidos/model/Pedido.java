@@ -26,7 +26,6 @@ public class Pedido {
     @Column(nullable = false)
     private LocalDate fecha;
 
-    // Valores posibles: PENDIENTE, EN_PROCESO, COMPLETADO, CANCELADO
     @Column(nullable = false, length = 20)
     private String estado;
 

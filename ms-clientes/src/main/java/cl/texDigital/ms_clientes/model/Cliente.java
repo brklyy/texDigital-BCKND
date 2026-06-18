@@ -31,7 +31,6 @@ public class Cliente {
     @Column(length = 255)
     private String direccion;
 
-    // Valores posibles: ACTIVO, INACTIVO
     @Column(nullable = false, length = 20)
     private String estado;
 }

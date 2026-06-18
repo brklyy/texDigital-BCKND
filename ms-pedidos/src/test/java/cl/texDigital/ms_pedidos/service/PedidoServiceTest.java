@@ -31,11 +31,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Pruebas unitarias de PedidoService.
- * Se mockean el repositorio y los clientes de ms-clientes y ms-productos.
- * Convencion: Given - When - Then.
- */
 @ExtendWith(MockitoExtension.class)
 class PedidoServiceTest {
 
@@ -89,16 +84,13 @@ class PedidoServiceTest {
     @Test
     @DisplayName("create calcula subtotales y total a partir de los precios de ms-productos")
     void create_calculaTotalYSubtotales() {
-        // Given: cliente activo y dos productos con precio
         when(clienteClient.findById(1L)).thenReturn(cliente("ACTIVO"));
         when(productoClient.findById(10L)).thenReturn(producto(10L, "Estampado", 3500.0));
         when(productoClient.findById(20L)).thenReturn(producto(20L, "Lienzo", 8000.0));
         when(pedidoRepository.save(any(Pedido.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        // When
         PedidoResponseDTO resultado = pedidoService.create(requestEjemplo());
 
-        // Then: total = 2*3500 + 3*8000 = 31000
         assertThat(resultado.getEstado()).isEqualTo("PENDIENTE");
         assertThat(resultado.getTotal()).isEqualTo(31000.0);
         assertThat(resultado.getDetalles()).hasSize(2);
@@ -109,10 +101,8 @@ class PedidoServiceTest {
     @Test
     @DisplayName("create lanza IllegalState cuando el cliente no esta ACTIVO")
     void create_lanzaIllegalState_siClienteInactivo() {
-        // Given
         when(clienteClient.findById(1L)).thenReturn(cliente("INACTIVO"));
 
-        // When / Then
         assertThatThrownBy(() -> pedidoService.create(requestEjemplo()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("activo");
@@ -123,11 +113,9 @@ class PedidoServiceTest {
     @Test
     @DisplayName("create propaga ResourceNotFound cuando el cliente no existe")
     void create_propagaNotFound_siClienteNoExiste() {
-        // Given
         when(clienteClient.findById(1L))
                 .thenThrow(new ResourceNotFoundException("Cliente no encontrado con id: 1"));
 
-        // When / Then
         assertThatThrownBy(() -> pedidoService.create(requestEjemplo()))
                 .isInstanceOf(ResourceNotFoundException.class);
         verify(pedidoRepository, never()).save(any());
@@ -136,17 +124,14 @@ class PedidoServiceTest {
     @Test
     @DisplayName("update revalida el cliente y recalcula el total con los nuevos detalles")
     void update_recalculaTotal() {
-        // Given
         when(pedidoRepository.findById(1L)).thenReturn(Optional.of(pedidoEjemplo()));
         when(clienteClient.findById(1L)).thenReturn(cliente("ACTIVO"));
         when(productoClient.findById(10L)).thenReturn(producto(10L, "Estampado", 3500.0));
         when(productoClient.findById(20L)).thenReturn(producto(20L, "Lienzo", 8000.0));
         when(pedidoRepository.save(any(Pedido.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        // When
         PedidoResponseDTO resultado = pedidoService.update(1L, requestEjemplo());
 
-        // Then: total recalculado = 2*3500 + 3*8000 = 31000
         assertThat(resultado.getTotal()).isEqualTo(31000.0);
         assertThat(resultado.getDetalles()).hasSize(2);
     }

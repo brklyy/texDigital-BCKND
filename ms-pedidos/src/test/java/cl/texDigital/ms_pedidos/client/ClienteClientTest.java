@@ -6,10 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * Verifica el manejo de errores remotos del ClienteClient.
- * Apunta a un puerto inexistente para forzar el fallo de conexion.
- */
 class ClienteClientTest {
 
     @Test

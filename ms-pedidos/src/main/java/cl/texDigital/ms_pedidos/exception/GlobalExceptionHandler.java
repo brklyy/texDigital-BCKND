@@ -26,7 +26,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(400, "Bad Request", ex.getMessage(), LocalDateTime.now()));
     }
 
-    // Error de comunicacion con un microservicio remoto (timeout, caido, 5xx)
     @ExceptionHandler(ServicioRemotoException.class)
     public ResponseEntity<ErrorResponse> handleServicioRemoto(ServicioRemotoException ex) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)

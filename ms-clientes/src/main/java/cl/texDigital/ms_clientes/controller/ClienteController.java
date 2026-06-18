@@ -90,7 +90,6 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
-    // Envuelve un DTO en un EntityModel con sus enlaces HATEOAS (self y coleccion).
     private EntityModel<ClienteResponseDTO> toModel(ClienteResponseDTO dto) {
         return EntityModel.of(dto,
                 linkTo(methodOn(ClienteController.class).getById(dto.getId())).withSelfRel(),
