@@ -5,12 +5,16 @@ import cl.texDigital.ms_resenas.dto.ResenaResponseDTO;
 import cl.texDigital.ms_resenas.service.ResenaService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Slf4j
 @RestController
@@ -24,27 +28,45 @@ public class ResenaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResenaResponseDTO>> getAll() {
+    public ResponseEntity<CollectionModel<EntityModel<ResenaResponseDTO>>> getAll() {
         log.info("GET /api/resenas");
-        return ResponseEntity.ok(resenaService.findAll());
+        List<EntityModel<ResenaResponseDTO>> models = resenaService.findAll().stream()
+                .map(dto -> EntityModel.of(dto,
+                        linkTo(methodOn(ResenaController.class).getById(dto.getId())).withSelfRel()))
+                .toList();
+        return ResponseEntity.ok(CollectionModel.of(models,
+                linkTo(methodOn(ResenaController.class).getAll()).withSelfRel()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResenaResponseDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<EntityModel<ResenaResponseDTO>> getById(@PathVariable Long id) {
         log.info("GET /api/resenas/{}", id);
-        return ResponseEntity.ok(resenaService.findById(id));
+        ResenaResponseDTO dto = resenaService.findById(id);
+        return ResponseEntity.ok(EntityModel.of(dto,
+                linkTo(methodOn(ResenaController.class).getById(id)).withSelfRel(),
+                linkTo(methodOn(ResenaController.class).getAll()).withRel("resenas")));
     }
 
     @GetMapping("/producto/{productoId}")
-    public ResponseEntity<List<ResenaResponseDTO>> getByProductoId(@PathVariable Long productoId) {
+    public ResponseEntity<CollectionModel<EntityModel<ResenaResponseDTO>>> getByProductoId(@PathVariable Long productoId) {
         log.info("GET /api/resenas/producto/{}", productoId);
-        return ResponseEntity.ok(resenaService.findByProductoId(productoId));
+        List<EntityModel<ResenaResponseDTO>> models = resenaService.findByProductoId(productoId).stream()
+                .map(dto -> EntityModel.of(dto,
+                        linkTo(methodOn(ResenaController.class).getById(dto.getId())).withSelfRel()))
+                .toList();
+        return ResponseEntity.ok(CollectionModel.of(models,
+                linkTo(methodOn(ResenaController.class).getByProductoId(productoId)).withSelfRel()));
     }
 
     @GetMapping("/cliente/{clienteId}")
-    public ResponseEntity<List<ResenaResponseDTO>> getByClienteId(@PathVariable Long clienteId) {
+    public ResponseEntity<CollectionModel<EntityModel<ResenaResponseDTO>>> getByClienteId(@PathVariable Long clienteId) {
         log.info("GET /api/resenas/cliente/{}", clienteId);
-        return ResponseEntity.ok(resenaService.findByClienteId(clienteId));
+        List<EntityModel<ResenaResponseDTO>> models = resenaService.findByClienteId(clienteId).stream()
+                .map(dto -> EntityModel.of(dto,
+                        linkTo(methodOn(ResenaController.class).getById(dto.getId())).withSelfRel()))
+                .toList();
+        return ResponseEntity.ok(CollectionModel.of(models,
+                linkTo(methodOn(ResenaController.class).getByClienteId(clienteId)).withSelfRel()));
     }
 
     @GetMapping("/producto/{productoId}/promedio")
@@ -61,7 +83,7 @@ public class ResenaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResenaResponseDTO> update(@PathVariable Long id,
-                                                      @Valid @RequestBody ResenaRequestDTO dto) {
+                                                    @Valid @RequestBody ResenaRequestDTO dto) {
         log.info("PUT /api/resenas/{}", id);
         return ResponseEntity.ok(resenaService.update(id, dto));
     }
