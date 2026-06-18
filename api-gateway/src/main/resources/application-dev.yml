@@ -1,0 +1,59 @@
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "*"
+            allowed-methods: "*"
+            allowed-headers: "*"
+      routes:
+        - id: auth-service
+          uri: http://localhost:8090
+          predicates:
+            - Path=/auth/**
+
+        - id: auth-service-usuarios
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/usuarios/**
+
+        - id: ms-clientes
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/clientes/**
+
+        - id: ms-inventario-textiles
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/textiles/**
+
+        - id: ms-inventario-rollos
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/rollos/**
+
+        - id: ms-pagos
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/pagos/**
+
+        - id: ms-pedidos
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/pedidos/**
+
+        - id: ms-produccion
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/ordenes/**
+
+        - id: ms-productos
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/productos/**
+
+        - id: ms-resenas
+          uri: http://localhost:8087
+          predicates:
+            - Path=/api/resenas/**
