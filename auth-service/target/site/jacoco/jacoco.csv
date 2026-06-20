@@ -1,9 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-,cl.texDigital.auth_service.util,JwtUtil,0,67,0,0,0,19,0,7,0,7
-,cl.texDigital.auth_service.security,JwtFilter,48,0,6,0,11,0,4,0,1,0
-,cl.texDigital.auth_service.service,AuthService,0,123,0,8,0,20,0,8,0,4
-,cl.texDigital.auth_service.service,UsuarioService,0,85,0,2,0,15,0,8,0,7
-,cl.texDigital.auth_service.controller,AuthController,0,14,0,0,0,2,0,2,0,2
-,cl.texDigital.auth_service.controller,UsuarioController,0,99,0,0,0,14,0,4,0,4
-,cl.texDigital.auth_service.exception,GlobalExceptionHandler,0,79,0,0,0,15,0,7,0,7
-,cl.texDigital.auth_service.exception,ResourceNotFoundException,0,4,0,0,0,2,0,1,0,1

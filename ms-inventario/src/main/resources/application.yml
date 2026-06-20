@@ -4,7 +4,10 @@ spring:
   application:
     name: ms-inventario
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
+    active: dev
+  autoconfigure:
+    exclude:
+      - org.springdoc.core.configuration.SpringDocHateoasConfiguration
   jpa:
     hibernate:
       ddl-auto: validate

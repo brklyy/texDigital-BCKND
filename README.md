@@ -94,7 +94,7 @@ Todos los endpoints son accesibles a través del Gateway en el puerto 8080:
 ## Stack tecnológico
 
 - **Framework:** Spring Boot 3.5.14 / Java 17
-- **API Gateway:** Spring Cloud Gateway 2024.0.1
+- **API Gateway:** Spring Cloud Gateway 2025.0.0 (WebFlux)
 - **Autenticación:** JWT (auth-service, Spring Security + jjwt)
 - **ORM:** JPA / Hibernate 6
 - **Migraciones:** Liquibase
@@ -112,13 +112,36 @@ Todos los endpoints son accesibles a través del Gateway en el puerto 8080:
 
 ## Requisitos previos (ejecución local)
 
+**Con Maven:**
 - Java 17 o superior
 - Maven 3.9+
-- MySQL activo en puerto 3306 (XAMPP o instalación nativa)
+- MySQL activo en puerto 3306
+
+**Con Docker:**
+- Docker y Docker Compose
 
 ---
 
-## Ejecución local
+## Ejecución local con Docker Compose (recomendado)
+
+Levanta todos los servicios y la base de datos MySQL con un único comando:
+
+```bash
+docker compose up --build
+```
+
+> El primer inicio puede tardar varios minutos mientras se compilan los JARs dentro de los contenedores.  
+> Las bases de datos se crean automáticamente mediante el script `docker/mysql-init.sql` y Liquibase.
+
+Para detener y limpiar:
+
+```bash
+docker compose down -v
+```
+
+---
+
+## Ejecución local con Maven
 
 Las bases de datos se crean automáticamente con Liquibase al primer inicio.
 
@@ -126,21 +149,21 @@ Levantar los servicios en el siguiente orden (una terminal por servicio):
 
 ```bash
 # 1 — Sin dependencias externas
-cd ms-inventario  && ./mvnw spring-boot:run
-cd ms-clientes    && ./mvnw spring-boot:run
-cd ms-productos   && ./mvnw spring-boot:run
-cd auth-service   && ./mvnw spring-boot:run
+cd ms-inventario  && mvn spring-boot:run
+cd ms-clientes    && mvn spring-boot:run
+cd ms-productos   && mvn spring-boot:run
+cd auth-service   && mvn spring-boot:run
 
 # 2 — Dependen de los anteriores
-cd ms-pedidos     && ./mvnw spring-boot:run
-cd ms-produccion  && ./mvnw spring-boot:run
+cd ms-pedidos     && mvn spring-boot:run
+cd ms-produccion  && mvn spring-boot:run
 
 # 3 — Dependen de ms-pedidos
-cd ms-pagos       && ./mvnw spring-boot:run
-cd "ms-reseñas"   && ./mvnw spring-boot:run
+cd ms-pagos       && mvn spring-boot:run
+cd "ms-reseñas"   && mvn spring-boot:run
 
 # 4 — Gateway (último, enruta a todos)
-cd api-gateway    && ./mvnw spring-boot:run
+cd api-gateway    && mvn spring-boot:run
 ```
 
 ### Autenticación JWT

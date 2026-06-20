@@ -1,6 +1,0 @@
-cl/texDigital/auth_service/service/AuthServiceTest.class
-cl/texDigital/auth_service/service/UsuarioServiceTest.class
-cl/texDigital/auth_service/util/JwtUtilTest.class
-cl/texDigital/auth_service/controller/AuthControllerTest.class
-cl/texDigital/auth_service/controller/UsuarioControllerTest.class
-cl/texDigital/auth_service/AuthServiceApplicationTests.class

@@ -1,59 +1,93 @@
 spring:
   cloud:
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowed-origins: "*"
-            allowed-methods: "*"
-            allowed-headers: "*"
-      routes:
-        - id: auth-service
-          uri: http://localhost:8090
-          predicates:
-            - Path=/auth/**
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowed-origins: "*"
+                allowed-methods: "*"
+                allowed-headers: "*"
+          default-filters:
+            - AddResponseHeader=X-Gateway, texDigital-API-Gateway
+            - AddResponseHeader=X-Powered-By, Spring-Cloud-Gateway
+          routes:
+            - id: auth-login
+              uri: http://localhost:8090
+              predicates:
+                - Path=/auth/login
+                - Method=POST
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: auth-service-usuarios
-          uri: http://localhost:8090
-          predicates:
-            - Path=/api/usuarios/**
+            - id: auth-register
+              uri: http://localhost:8090
+              predicates:
+                - Path=/auth/register
+                - Method=POST
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-clientes
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/clientes/**
+            - id: auth-service-usuarios
+              uri: http://localhost:8090
+              predicates:
+                - Path=/api/usuarios/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-inventario-textiles
-          uri: http://localhost:8081
-          predicates:
-            - Path=/api/textiles/**
+            - id: ms-clientes
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/clientes/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-inventario-rollos
-          uri: http://localhost:8081
-          predicates:
-            - Path=/api/rollos/**
+            - id: ms-inventario-textiles
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/textiles/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-pagos
-          uri: http://localhost:8086
-          predicates:
-            - Path=/api/pagos/**
+            - id: ms-inventario-rollos
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/rollos/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-pedidos
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/pedidos/**
+            - id: ms-pagos
+              uri: http://localhost:8086
+              predicates:
+                - Path=/api/pagos/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-produccion
-          uri: http://localhost:8085
-          predicates:
-            - Path=/api/ordenes/**
+            - id: ms-pedidos
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/pedidos/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-productos
-          uri: http://localhost:8084
-          predicates:
-            - Path=/api/productos/**
+            - id: ms-produccion
+              uri: http://localhost:8085
+              predicates:
+                - Path=/api/ordenes/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-resenas
-          uri: http://localhost:8087
-          predicates:
-            - Path=/api/resenas/**
+            - id: ms-productos
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/productos/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
+
+            - id: ms-resenas
+              uri: http://localhost:8087
+              predicates:
+                - Path=/api/resenas/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
