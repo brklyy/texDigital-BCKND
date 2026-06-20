@@ -4,59 +4,93 @@ server:
 spring:
   cloud:
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowed-origins: "*"
-            allowed-methods: "*"
-            allowed-headers: "*"
-      routes:
-        - id: auth-service
-          uri: ${AUTH_SERVICE_URL}
-          predicates:
-            - Path=/auth/**
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowed-origins: "*"
+                allowed-methods: "*"
+                allowed-headers: "*"
+          default-filters:
+            - AddResponseHeader=X-Gateway, texDigital-API-Gateway
+            - AddResponseHeader=X-Powered-By, Spring-Cloud-Gateway
+          routes:
+            - id: auth-login
+              uri: ${AUTH_SERVICE_URL}
+              predicates:
+                - Path=/auth/login
+                - Method=POST
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: auth-service-usuarios
-          uri: ${AUTH_SERVICE_URL}
-          predicates:
-            - Path=/api/usuarios/**
+            - id: auth-register
+              uri: ${AUTH_SERVICE_URL}
+              predicates:
+                - Path=/auth/register
+                - Method=POST
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-clientes
-          uri: ${MS_CLIENTES_URL}
-          predicates:
-            - Path=/api/clientes/**
+            - id: auth-service-usuarios
+              uri: ${AUTH_SERVICE_URL}
+              predicates:
+                - Path=/api/usuarios/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-inventario-textiles
-          uri: ${MS_INVENTARIO_URL}
-          predicates:
-            - Path=/api/textiles/**
+            - id: ms-clientes
+              uri: ${MS_CLIENTES_URL}
+              predicates:
+                - Path=/api/clientes/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-inventario-rollos
-          uri: ${MS_INVENTARIO_URL}
-          predicates:
-            - Path=/api/rollos/**
+            - id: ms-inventario-textiles
+              uri: ${MS_INVENTARIO_URL}
+              predicates:
+                - Path=/api/textiles/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-pagos
-          uri: ${MS_PAGOS_URL}
-          predicates:
-            - Path=/api/pagos/**
+            - id: ms-inventario-rollos
+              uri: ${MS_INVENTARIO_URL}
+              predicates:
+                - Path=/api/rollos/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-pedidos
-          uri: ${MS_PEDIDOS_URL}
-          predicates:
-            - Path=/api/pedidos/**
+            - id: ms-pagos
+              uri: ${MS_PAGOS_URL}
+              predicates:
+                - Path=/api/pagos/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-produccion
-          uri: ${MS_PRODUCCION_URL}
-          predicates:
-            - Path=/api/ordenes/**
+            - id: ms-pedidos
+              uri: ${MS_PEDIDOS_URL}
+              predicates:
+                - Path=/api/pedidos/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-productos
-          uri: ${MS_PRODUCTOS_URL}
-          predicates:
-            - Path=/api/productos/**
+            - id: ms-produccion
+              uri: ${MS_PRODUCCION_URL}
+              predicates:
+                - Path=/api/ordenes/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
 
-        - id: ms-resenas
-          uri: ${MS_RESENAS_URL}
-          predicates:
-            - Path=/api/resenas/**
+            - id: ms-productos
+              uri: ${MS_PRODUCTOS_URL}
+              predicates:
+                - Path=/api/productos/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
+
+            - id: ms-resenas
+              uri: ${MS_RESENAS_URL}
+              predicates:
+                - Path=/api/resenas/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
