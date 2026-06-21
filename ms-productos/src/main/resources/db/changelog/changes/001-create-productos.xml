@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001" author="bruno">
+        <createTable tableName="productos">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nombre" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tipo" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="textil_requerido" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="precio_base" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="002" author="bruno">
+        <insert tableName="productos">
+            <column name="nombre" value="Estampado Básico"/>
+            <column name="tipo" value="ESTAMPADO"/>
+            <column name="textil_requerido" value="Algodón"/>
+            <column name="precio_base" valueNumeric="3500"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Lienzo Promocional"/>
+            <column name="tipo" value="LIENZO"/>
+            <column name="textil_requerido" value="Lienzo"/>
+            <column name="precio_base" valueNumeric="8000"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Cubresensor Estándar"/>
+            <column name="tipo" value="CUBRESENSOR"/>
+            <column name="textil_requerido" value="Microfibra"/>
+            <column name="precio_base" valueNumeric="2500"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Bandera Corporativa"/>
+            <column name="tipo" value="BANDERA"/>
+            <column name="textil_requerido" value="Tela Banderin"/>
+            <column name="precio_base" valueNumeric="15000"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Banderín Evento"/>
+            <column name="tipo" value="BANDERIN"/>
+            <column name="textil_requerido" value="Tela Banderin"/>
+            <column name="precio_base" valueNumeric="4500"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Estuche Premium"/>
+            <column name="tipo" value="ESTUCHE"/>
+            <column name="textil_requerido" value="Cuero Sintético"/>
+            <column name="precio_base" valueNumeric="6000"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Monedero Bordado"/>
+            <column name="tipo" value="MONEDERO"/>
+            <column name="textil_requerido" value="Algodón"/>
+            <column name="precio_base" valueNumeric="3000"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Mantel Corporativo"/>
+            <column name="tipo" value="MANTEL"/>
+            <column name="textil_requerido" value="Poliéster"/>
+            <column name="precio_base" valueNumeric="12000"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Funda Cojín Decorativa"/>
+            <column name="tipo" value="FUNDA_COJIN"/>
+            <column name="textil_requerido" value="Algodón"/>
+            <column name="precio_base" valueNumeric="5500"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Velo Nupcial"/>
+            <column name="tipo" value="VELO"/>
+            <column name="textil_requerido" value="Tul"/>
+            <column name="precio_base" valueNumeric="18000"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Pañuelo Personalizado"/>
+            <column name="tipo" value="PANHUELO"/>
+            <column name="textil_requerido" value="Algodón"/>
+            <column name="precio_base" valueNumeric="2000"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Backlight Publicitario"/>
+            <column name="tipo" value="BACKLIGHT"/>
+            <column name="textil_requerido" value="Pearl"/>
+            <column name="precio_base" valueNumeric="25000"/>
+        </insert>
+        <insert tableName="productos">
+            <column name="nombre" value="Caja Backlight Premium"/>
+            <column name="tipo" value="CAJA_BACKLIGHT"/>
+            <column name="textil_requerido" value="Pearl"/>
+            <column name="precio_base" valueNumeric="45000"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

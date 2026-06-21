@@ -1,0 +1,18 @@
+# Perfil DEV: ejecucion local con MySQL de XAMPP (localhost:3306)
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/texdigital_pedidos?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    username: texdigital
+    password: texdigital123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# URLs de los microservicios consumidos (comunicacion REST) en entorno local
+ms-clientes:
+  url: http://localhost:8082
+ms-productos:
+  url: http://localhost:8084

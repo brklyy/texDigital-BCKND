@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="002" author="branco">
+        <createTable tableName="detalle_pedido">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="pedido_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="producto_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nombre_producto" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cantidad" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="precio_unitario" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subtotal" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="detalle_pedido"
+                baseColumnNames="pedido_id"
+                constraintName="fk_detalle_pedido"
+                referencedTableName="pedidos"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

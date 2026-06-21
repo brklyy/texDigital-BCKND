@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="3" author="branco-aliaga">
+        <insert tableName="textil">
+            <column name="nombre" value="Pearl"/>
+            <column name="ancho_cm" value="160.00"/>
+            <column name="descripcion" value="Textil exclusivo para productos Backlight. Superficie semitransparente con alta transmision de luz."/>
+        </insert>
+        <insert tableName="textil">
+            <column name="nombre" value="Mesh"/>
+            <column name="ancho_cm" value="150.00"/>
+            <column name="descripcion" value="Textil tipo malla para banners y lienzos de exterior. Permite circulacion de aire."/>
+        </insert>
+        <insert tableName="textil">
+            <column name="nombre" value="Canvas"/>
+            <column name="ancho_cm" value="137.00"/>
+            <column name="descripcion" value="Textil Canvas de alta resistencia para estampados y lienzos de interior."/>
+        </insert>
+        <insert tableName="textil">
+            <column name="nombre" value="Saten"/>
+            <column name="ancho_cm" value="140.00"/>
+            <column name="descripcion" value="Textil satinado de acabado suave. Ideal para velos, panhuelos y fundas de cojin."/>
+        </insert>
+        <insert tableName="textil">
+            <column name="nombre" value="Latex"/>
+            <column name="ancho_cm" value="130.00"/>
+            <column name="descripcion" value="Textil base para impresion latex. Utilizado en manteles y cubresensores de mall."/>
+        </insert>
+        <insert tableName="textil">
+            <column name="nombre" value="Poliester"/>
+            <column name="ancho_cm" value="160.00"/>
+            <column name="descripcion" value="Textil poliester resistente para banderas, banderines y estuches."/>
+        </insert>
+        <insert tableName="textil">
+            <column name="nombre" value="Microporoso"/>
+            <column name="ancho_cm" value="150.00"/>
+            <column name="descripcion" value="Textil microporoso para impresiones de alta resolucion en interiores."/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

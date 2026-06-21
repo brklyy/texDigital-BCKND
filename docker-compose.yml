@@ -1,0 +1,224 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: texdigital-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: texdigital
+      MYSQL_PASSWORD: texdigital123
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql-init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "texdigital", "-ptexdigital123"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    networks:
+      - texdigital-net
+
+  auth-service:
+    build: ./auth-service
+    container_name: texdigital-auth
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_auth?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+      JWT_SECRET: texDigitalSecretKey2026AuthServiceJWTHS256Algorithm
+    ports:
+      - "8090:8090"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - texdigital-net
+
+  ms-clientes:
+    build: ./ms-clientes
+    container_name: texdigital-clientes
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_clientes?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - texdigital-net
+
+  ms-inventario:
+    build: ./ms-inventario
+    container_name: texdigital-inventario
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_inventario?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - texdigital-net
+
+  ms-productos:
+    build: ./ms-productos
+    container_name: texdigital-productos
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_productos?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+    ports:
+      - "8084:8084"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - texdigital-net
+
+  ms-pedidos:
+    build: ./ms-pedidos
+    container_name: texdigital-pedidos
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_pedidos?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+      MS_CLIENTES_URL: http://ms-clientes:8082
+      MS_PRODUCTOS_URL: http://ms-productos:8084
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-clientes:
+        condition: service_started
+      ms-productos:
+        condition: service_started
+    networks:
+      - texdigital-net
+
+  ms-pagos:
+    build: ./ms-pagos
+    container_name: texdigital-pagos
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_pagos?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+      MS_PEDIDOS_URL: http://ms-pedidos:8083
+    ports:
+      - "8086:8086"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-pedidos:
+        condition: service_started
+    networks:
+      - texdigital-net
+
+  ms-produccion:
+    build: ./ms-produccion
+    container_name: texdigital-produccion
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_produccion?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+      MS_INVENTARIO_URL: http://ms-inventario:8081
+    ports:
+      - "8085:8085"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-inventario:
+        condition: service_started
+    networks:
+      - texdigital-net
+
+  ms-resenas:
+    build: ./ms-reseñas
+    container_name: texdigital-resenas
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_resenas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+      MS_PEDIDOS_URL: http://ms-pedidos:8083
+    ports:
+      - "8087:8087"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-pedidos:
+        condition: service_started
+    networks:
+      - texdigital-net
+
+  ms-envios:
+    build: ./ms-envios
+    container_name: texdigital-envios
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_envios?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+      MS_PEDIDOS_URL: http://ms-pedidos:8083
+      MS_CLIENTES_URL: http://ms-clientes:8082
+    ports:
+      - "8088:8088"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-pedidos:
+        condition: service_started
+      ms-clientes:
+        condition: service_started
+    networks:
+      - texdigital-net
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: texdigital-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JWT_SECRET: texDigitalSecretKey2026AuthServiceJWTHS256Algorithm
+      AUTH_SERVICE_URL: http://auth-service:8090
+      MS_CLIENTES_URL: http://ms-clientes:8082
+      MS_INVENTARIO_URL: http://ms-inventario:8081
+      MS_PAGOS_URL: http://ms-pagos:8086
+      MS_PEDIDOS_URL: http://ms-pedidos:8083
+      MS_PRODUCCION_URL: http://ms-produccion:8085
+      MS_PRODUCTOS_URL: http://ms-productos:8084
+      MS_RESENAS_URL: http://ms-resenas:8087
+      MS_ENVIOS_URL: http://ms-envios:8088
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - ms-clientes
+      - ms-inventario
+      - ms-pagos
+      - ms-pedidos
+      - ms-produccion
+      - ms-productos
+      - ms-resenas
+      - ms-envios
+    networks:
+      - texdigital-net
+
+volumes:
+  mysql-data:
+
+networks:
+  texdigital-net:
+    driver: bridge

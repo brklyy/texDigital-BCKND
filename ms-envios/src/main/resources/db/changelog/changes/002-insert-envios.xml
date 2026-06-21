@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="002" author="texdigital">
+        <insert tableName="envios">
+            <column name="pedido_id" value="1"/>
+            <column name="cliente_id" value="1"/>
+            <column name="fecha_envio" value="2026-06-10"/>
+            <column name="fecha_estimada_entrega" value="2026-06-20"/>
+            <column name="estado" value="ENTREGADO"/>
+            <column name="transportista" value="Starken"/>
+            <column name="numero_seguimiento" value="STK-2026-001"/>
+            <column name="direccion_destino" value="Av. Providencia 1234, Santiago"/>
+        </insert>
+        <insert tableName="envios">
+            <column name="pedido_id" value="2"/>
+            <column name="cliente_id" value="2"/>
+            <column name="fecha_envio" value="2026-06-15"/>
+            <column name="fecha_estimada_entrega" value="2026-06-25"/>
+            <column name="estado" value="EN_CAMINO"/>
+            <column name="transportista" value="Chilexpress"/>
+            <column name="numero_seguimiento" value="CHX-2026-045"/>
+            <column name="direccion_destino" value="Calle Los Aromos 567, Valparaiso"/>
+        </insert>
+        <insert tableName="envios">
+            <column name="pedido_id" value="3"/>
+            <column name="cliente_id" value="3"/>
+            <column name="fecha_envio" value="2026-06-18"/>
+            <column name="fecha_estimada_entrega" value="2026-06-30"/>
+            <column name="estado" value="PREPARANDO"/>
+            <column name="transportista" value="Blue Express"/>
+            <column name="numero_seguimiento" value="BLX-2026-089"/>
+            <column name="direccion_destino" value="Pasaje El Roble 890, Concepcion"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

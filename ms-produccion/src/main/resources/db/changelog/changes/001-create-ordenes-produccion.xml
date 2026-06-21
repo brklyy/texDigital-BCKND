@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="001-create-ordenes-produccion" author="bruno">
+        <createTable tableName="ordenes_produccion">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="pedido_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="producto_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="textil_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rollo_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="metros_usados" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="estado" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fecha_creacion" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fecha_fin" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="002-seed-ordenes-produccion" author="bruno">
+        <insert tableName="ordenes_produccion">
+            <column name="pedido_id" value="1"/>
+            <column name="producto_id" value="1"/>
+            <column name="textil_id" value="1"/>
+            <column name="rollo_id" value="1"/>
+            <column name="metros_usados" value="12.5"/>
+            <column name="estado" value="COMPLETADO"/>
+            <column name="fecha_creacion" value="2026-01-10 08:00:00"/>
+            <column name="fecha_fin" value="2026-01-10 16:00:00"/>
+        </insert>
+        <insert tableName="ordenes_produccion">
+            <column name="pedido_id" value="2"/>
+            <column name="producto_id" value="3"/>
+            <column name="textil_id" value="2"/>
+            <column name="rollo_id" value="2"/>
+            <column name="metros_usados" value="8.0"/>
+            <column name="estado" value="EN_PRODUCCION"/>
+            <column name="fecha_creacion" value="2026-01-15 09:30:00"/>
+            <column name="fecha_fin" valueComputed="NULL"/>
+        </insert>
+        <insert tableName="ordenes_produccion">
+            <column name="pedido_id" value="3"/>
+            <column name="producto_id" value="5"/>
+            <column name="textil_id" value="1"/>
+            <column name="rollo_id" value="3"/>
+            <column name="metros_usados" value="20.0"/>
+            <column name="estado" value="PENDIENTE"/>
+            <column name="fecha_creacion" value="2026-01-20 10:00:00"/>
+            <column name="fecha_fin" valueComputed="NULL"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

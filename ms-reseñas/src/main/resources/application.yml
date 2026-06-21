@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: ms-resenas
+  profiles:
+    active: dev
+  autoconfigure:
+    exclude:
+      - org.springdoc.core.configuration.SpringDocHateoasConfiguration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+server:
+  port: ${SERVER_PORT:8087}
+
+logging:
+  level:
+    cl.texDigital.ms_resenas: ${LOG_LEVEL:DEBUG}
+    org.springframework.web: INFO
+    liquibase: INFO
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
