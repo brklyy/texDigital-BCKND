@@ -164,6 +164,25 @@ services:
     networks:
       - texdigital-net
 
+  ms-envios:
+    build: ./ms-envios
+    container_name: texdigital-envios
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:mysql://mysql:3306/texdigital_envios?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+      DB_USERNAME: texdigital
+      DB_PASSWORD: texdigital123
+      MS_PEDIDOS_URL: http://ms-pedidos:8083
+    ports:
+      - "8088:8088"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-pedidos:
+        condition: service_started
+    networks:
+      - texdigital-net
+
   api-gateway:
     build: ./api-gateway
     container_name: texdigital-gateway
@@ -178,6 +197,7 @@ services:
       MS_PRODUCCION_URL: http://ms-produccion:8085
       MS_PRODUCTOS_URL: http://ms-productos:8084
       MS_RESENAS_URL: http://ms-resenas:8087
+      MS_ENVIOS_URL: http://ms-envios:8088
     ports:
       - "8080:8080"
     depends_on:
@@ -189,6 +209,7 @@ services:
       - ms-produccion
       - ms-productos
       - ms-resenas
+      - ms-envios
     networks:
       - texdigital-net
 

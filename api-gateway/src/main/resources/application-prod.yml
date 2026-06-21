@@ -94,3 +94,10 @@ spring:
                 - Path=/api/resenas/**
               filters:
                 - AddRequestHeader=X-Source, api-gateway
+
+            - id: ms-envios
+              uri: ${MS_ENVIOS_URL}
+              predicates:
+                - Path=/api/envios/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
