@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="002" author="tomas">
+        <insert tableName="envios">
+            <column name="pedido_id" valueNumeric="1"/>
+            <column name="direccion_entrega" value="Av. Providencia 1234, Santiago"/>
+            <column name="transportista" value="Chilexpress"/>
+            <column name="codigo_seguimiento" value="ENV-A1B2C3D4"/>
+            <column name="estado" value="ENTREGADO"/>
+            <column name="fecha_creacion" valueDate="2026-05-02"/>
+            <column name="fecha_estimada_entrega" valueDate="2026-05-05"/>
+            <column name="fecha_entrega_real" valueDate="2026-05-04"/>
+        </insert>
+        <insert tableName="envios">
+            <column name="pedido_id" valueNumeric="2"/>
+            <column name="direccion_entrega" value="Calle Las Flores 567, Valparaiso"/>
+            <column name="transportista" value="Starken"/>
+            <column name="codigo_seguimiento" value="ENV-E5F6G7H8"/>
+            <column name="estado" value="EN_CAMINO"/>
+            <column name="fecha_creacion" valueDate="2026-05-06"/>
+            <column name="fecha_estimada_entrega" valueDate="2026-05-10"/>
+        </insert>
+        <insert tableName="envios">
+            <column name="pedido_id" valueNumeric="3"/>
+            <column name="direccion_entrega" value="Pasaje Los Alerces 89, Concepcion"/>
+            <column name="transportista" value="DHL"/>
+            <column name="codigo_seguimiento" value="ENV-I9J0K1L2"/>
+            <column name="estado" value="PENDIENTE"/>
+            <column name="fecha_creacion" valueDate="2026-05-11"/>
+            <column name="fecha_estimada_entrega" valueDate="2026-05-16"/>
+        </insert>
+        <insert tableName="envios">
+            <column name="pedido_id" valueNumeric="4"/>
+            <column name="direccion_entrega" value="Av. Grecia 321, Antofagasta"/>
+            <column name="transportista" value="Chilexpress"/>
+            <column name="codigo_seguimiento" value="ENV-M3N4O5P6"/>
+            <column name="estado" value="CANCELADO"/>
+            <column name="fecha_creacion" valueDate="2026-05-16"/>
+            <column name="fecha_estimada_entrega" valueDate="2026-05-21"/>
+        </insert>
+        <insert tableName="envios">
+            <column name="pedido_id" valueNumeric="5"/>
+            <column name="direccion_entrega" value="Calle Maipu 456, Temuco"/>
+            <column name="transportista" value="Starken"/>
+            <column name="codigo_seguimiento" value="ENV-Q7R8S9T0"/>
+            <column name="estado" value="PENDIENTE"/>
+            <column name="fecha_creacion" valueDate="2026-05-21"/>
+            <column name="fecha_estimada_entrega" valueDate="2026-05-26"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

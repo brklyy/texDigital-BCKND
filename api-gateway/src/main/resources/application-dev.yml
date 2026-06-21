@@ -91,3 +91,10 @@ spring:
                 - Path=/api/resenas/**
               filters:
                 - AddRequestHeader=X-Source, api-gateway
+
+            - id: ms-envios
+              uri: http://localhost:8088
+              predicates:
+                - Path=/api/envios/**
+              filters:
+                - AddRequestHeader=X-Source, api-gateway
