@@ -167,7 +167,7 @@ cd ms-produccion  && mvn spring-boot:run
 
 # 3 — Dependen de ms-pedidos
 cd ms-pagos       && mvn spring-boot:run
-cd "ms-reseñas"   && mvn spring-boot:run
+cd ms-resenas     && mvn spring-boot:run
 cd ms-envios      && mvn spring-boot:run
 
 # 4 — Gateway (último, enruta a todos)

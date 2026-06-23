@@ -146,7 +146,7 @@ services:
       - texdigital-net
 
   ms-resenas:
-    build: ./ms-reseñas
+    build: ./ms-resenas
     container_name: texdigital-resenas
     environment:
       SPRING_PROFILES_ACTIVE: prod
