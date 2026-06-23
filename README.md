@@ -76,6 +76,21 @@ Sistema de gestión para empresa de productos textiles digitales. Permite admini
 | ms-reseñas | http://localhost:8087/swagger-ui.html |
 | ms-envios | http://localhost:8088/swagger-ui.html |
 
+## Documentación Swagger UI (despliegue remoto — Render.com)
+
+| MS | URL Swagger |
+|---|---|
+| auth-service | https://texdigital-auth-service.onrender.com/swagger-ui.html |
+| ms-inventario | https://texdigital-ms-inventario.onrender.com/swagger-ui.html |
+| ms-clientes | https://texdigital-ms-clientes.onrender.com/swagger-ui.html |
+| ms-pedidos | https://texdigital-ms-pedidos.onrender.com/swagger-ui.html |
+| ms-productos | https://texdigital-ms-productos.onrender.com/swagger-ui.html |
+| ms-produccion | https://texdigital-ms-produccion.onrender.com/swagger-ui.html |
+| ms-pagos | https://texdigital-ms-pagos.onrender.com/swagger-ui.html |
+| ms-resenas | https://texdigital-ms-resenas.onrender.com/swagger-ui.html |
+| ms-envios | https://texdigital-ms-envios.onrender.com/swagger-ui.html |
+| api-gateway | https://texdigital-api-gateway.onrender.com |
+
 ---
 
 ## Rutas del API Gateway
@@ -234,44 +249,44 @@ JWT_SECRET=<clave_secreta_minimo_32_caracteres>
 
 **ms-pagos (adicional):**
 ```
-MS_PEDIDOS_URL=https://<url-railway-ms-pedidos>
+MS_PEDIDOS_URL=https://texdigital-ms-pedidos.onrender.com
 ```
 
 **ms-pedidos (adicional):**
 ```
-MS_CLIENTES_URL=https://<url-railway-ms-clientes>
-MS_PRODUCTOS_URL=https://<url-railway-ms-productos>
+MS_CLIENTES_URL=https://texdigital-ms-clientes.onrender.com
+MS_PRODUCTOS_URL=https://texdigital-ms-productos.onrender.com
 ```
 
 **ms-produccion (adicional):**
 ```
-MS_INVENTARIO_URL=https://<url-railway-ms-inventario>
+MS_INVENTARIO_URL=https://texdigital-ms-inventario.onrender.com
 ```
 
-**ms-reseñas (adicional):**
+**ms-resenas (adicional):**
 ```
-MS_PEDIDOS_URL=https://<url-railway-ms-pedidos>
+MS_PEDIDOS_URL=https://texdigital-ms-pedidos.onrender.com
 ```
 
 **ms-envios (adicional):**
 ```
-MS_PEDIDOS_URL=https://<url-railway-ms-pedidos>
+MS_PEDIDOS_URL=https://texdigital-ms-pedidos.onrender.com
 ```
 
 **api-gateway (adicional):**
 ```
-AUTH_SERVICE_URL=https://<url-railway-auth-service>
-MS_CLIENTES_URL=https://<url-railway-ms-clientes>
-MS_INVENTARIO_URL=https://<url-railway-ms-inventario>
-MS_PAGOS_URL=https://<url-railway-ms-pagos>
-MS_PEDIDOS_URL=https://<url-railway-ms-pedidos>
-MS_PRODUCCION_URL=https://<url-railway-ms-produccion>
-MS_PRODUCTOS_URL=https://<url-railway-ms-productos>
-MS_RESENAS_URL=https://<url-railway-ms-resenas>
-MS_ENVIOS_URL=https://<url-railway-ms-envios>
+AUTH_SERVICE_URL=https://texdigital-auth-service.onrender.com
+MS_CLIENTES_URL=https://texdigital-ms-clientes.onrender.com
+MS_INVENTARIO_URL=https://texdigital-ms-inventario.onrender.com
+MS_PAGOS_URL=https://texdigital-ms-pagos.onrender.com
+MS_PEDIDOS_URL=https://texdigital-ms-pedidos.onrender.com
+MS_PRODUCCION_URL=https://texdigital-ms-produccion.onrender.com
+MS_PRODUCTOS_URL=https://texdigital-ms-productos.onrender.com
+MS_RESENAS_URL=https://texdigital-ms-resenas.onrender.com
+MS_ENVIOS_URL=https://texdigital-ms-envios.onrender.com
 ```
 
-> Railway inyecta la variable `PORT` automáticamente. No es necesario configurarla.
+> Render inyecta la variable `PORT` automáticamente. No es necesario configurarla.
 
 ---
 
