@@ -57,7 +57,7 @@ Sistema de gestión para empresa de productos textiles digitales. Permite admini
 | ms-productos | 8084 | texdigital_productos | `/api/productos` |
 | ms-produccion | 8085 | texdigital_produccion | `/api/ordenes` |
 | ms-pagos | 8086 | texdigital_pagos | `/api/pagos` |
-| ms-reseñas | 8087 | texdigital_resenas | `/api/resenas` |
+| ms-resenas | 8087 | texdigital_resenas | `/api/resenas` |
 | ms-envios | 8088 | texdigital_envios | `/api/envios` |
 
 ---
@@ -73,7 +73,7 @@ Sistema de gestión para empresa de productos textiles digitales. Permite admini
 | ms-productos | http://localhost:8084/swagger-ui.html |
 | ms-produccion | http://localhost:8085/swagger-ui.html |
 | ms-pagos | http://localhost:8086/swagger-ui.html |
-| ms-reseñas | http://localhost:8087/swagger-ui.html |
+| ms-resenas | http://localhost:8087/swagger-ui.html |
 | ms-envios | http://localhost:8088/swagger-ui.html |
 
 ## Documentación Swagger UI (despliegue remoto — Render.com)
@@ -228,16 +228,16 @@ Los siguientes MS cargan datos iniciales automáticamente si la tabla está vac�
 
 ---
 
-## Despliegue remoto (Railway)
+## Despliegue remoto (Render.com)
 
-Cada MS y el API Gateway se despliegan como servicio independiente en Railway con su propia base de datos MySQL.
+Cada MS y el API Gateway se despliegan como servicio independiente en Render.com con TiDB Cloud Serverless como base de datos MySQL.
 
 ### Variables de entorno por servicio
 
 **Todos los MS con base de datos:**
 ```
 SPRING_PROFILES_ACTIVE=prod
-DB_URL=jdbc:mysql://<host>:<port>/<database>
+DB_URL=jdbc:mysql://<host>.prod.aws.tidbcloud.com:4000/<database>?createDatabaseIfNotExist=true&useSSL=true&serverTimezone=UTC
 DB_USERNAME=<usuario>
 DB_PASSWORD=<contraseña>
 ```
@@ -275,6 +275,7 @@ MS_PEDIDOS_URL=https://texdigital-ms-pedidos.onrender.com
 
 **api-gateway (adicional):**
 ```
+JWT_SECRET=<clave_secreta_minimo_32_caracteres>
 AUTH_SERVICE_URL=https://texdigital-auth-service.onrender.com
 MS_CLIENTES_URL=https://texdigital-ms-clientes.onrender.com
 MS_INVENTARIO_URL=https://texdigital-ms-inventario.onrender.com
